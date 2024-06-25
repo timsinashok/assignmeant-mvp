@@ -1,0 +1,50 @@
+{
+    "Bob Smith": [
+        {
+            "id": 1,
+            "question": "What color did the sky turn from and to in the poem?",
+            "correct_answer": "From orange to blue"
+        },
+        {
+            "id": 2,
+            "question": "In the poem, what natural phenomenon is described in a way that might inspire a painting?",
+            "correct_answer": "The transition of the sky from orange to blue and the sun clinging to the clouds"
+        }
+    ],
+    "Carol Lee": [
+        {
+            "id": 1,
+            "question": "What does the poet say brings happiness to the bottom of their throat?",
+            "correct_answer": "The soft touch of orange"
+        },
+        {
+            "id": 2,
+            "question": "How does the poet describe the city at night?",
+            "correct_answer": "Small and dark with small bulbs and street lights trying to compensate for the sunlight"
+        }
+    ],
+    "David Martinez": [
+        {
+            "id": 1,
+            "question": "What does the poet see in the morning that brings hope?",
+            "correct_answer": "The sun clinging to the clouds and the orange sky"
+        },
+        {
+            "id": 2,
+            "question": "How does the poet describe the city at night, which could be an interesting subject for photography?",
+            "correct_answer": "Small and dark with small bulbs and street lights trying to compensate for the sunlight"
+        }
+    ],
+    "Eve Brown": [
+        {
+            "id": 1,
+            "question": "What does the poet say about the dark sky?",
+            "correct_answer": "It makes them suffocate and it has a whole night to live by"
+        },
+        {
+            "id": 2,
+            "question": "What does the poet hope for tomorrow morning?",
+            "correct_answer": "The orange comes back with all the shades their eyes can withstand"
+        }
+    ]
+}
