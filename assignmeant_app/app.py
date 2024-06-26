@@ -14,6 +14,7 @@ app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
 
 migrate = Migrate(app, db)
 
@@ -117,11 +118,10 @@ def index():
 
     return render_template('index.html', assignments=assignments, username=session['username'])
 
-# Route for uploading assignments (professors only)
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if 'username' not in session or session.get('role') != 'professor':
-        return redirect(url_for('home'))
+        return redirect(url_for('index'))
 
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -134,8 +134,14 @@ def upload():
             return redirect(request.url)
         
         if file:
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], 'assignments.json')
+            upload_folder = os.path.join(app.root_path, 'uploads')
+            # Ensure the upload directory exists
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            filepath = os.path.join(upload_folder, 'assignments.json')
             file.save(filepath)
+            
             assignments_data = load_assignments()
 
             for assignment_data in assignments_data:
