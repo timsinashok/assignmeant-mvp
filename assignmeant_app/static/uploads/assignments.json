@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "question": "What is the campus ID of MANOJ DHAKAL?",
+        "correct_answer": "N12379849"
+    },
+    {
+        "id": 2,
+        "question": "When does the Spring 2024 term start?",
+        "correct_answer": "January 17, 2024"
+    },
+    {
+        "id": 3,
+        "question": "When does the Spring 2024 term end?",
+        "correct_answer": "May 14, 2024"
+    },
+    {
+        "id": 4,
+        "question": "What is the address of NYU Paris?",
+        "correct_answer": "5 7 Boulevard Saint Germain, Paris, France 75005"
+    },
+    {
+        "id": 5,
+        "question": "What is the phone number for NYU Paris?",
+        "correct_answer": "011-33-1-5373-2800"
+    },
+    {
+        "id": 6,
+        "question": "Who is the Director of Outbound Immigration and Mobility?",
+        "correct_answer": "Robert J. Sanford, Jr."
+    },
+    {
+        "id": 7,
+        "question": "What is the email address of Robert J. Sanford, Jr.?",
+        "correct_answer": "robert.sanford@nyu.edu"
+    },
+    {
+        "id": 8,
+        "question": "What is the phone number for NYU Office of Global Services?",
+        "correct_answer": "(212) 998-4242"
+    },
+    {
+        "id": 9,
+        "question": "What is the address of R\u00e9sidence Les Estudines?",
+        "correct_answer": "47, avenue du G\u00e9n\u00e9ral de Gaulle, 93170 BAGNOLET"
+    },
+    {
+        "id": 10,
+        "question": "What is the address of Maison de l'\u00cele-de-France?",
+        "correct_answer": "9D boulevard Jourdan, 75014 Paris"
+    },
+    {
+        "id": 11,
+        "question": "What is the address of Fondation des Etats-Unis?",
+        "correct_answer": "15 boulevard Jourdan, 75014 Paris"
+    },
+    {
+        "id": 12,
+        "question": "What is the phone number for Fondation des Etats-Unis?",
+        "correct_answer": "00-33-1-53-80-68-80"
+    },
+    {
+        "id": 13,
+        "question": "Who is the Senior Director of Student Services and Support?",
+        "correct_answer": "Christopher L Nicolussi"
+    },
+    {
+        "id": 14,
+        "question": "What must all students provide before departure?",
+        "correct_answer": "Proof of health insurance"
+    },
+    {
+        "id": 15,
+        "question": "In what language are courses at NYU Paris taught?",
+        "correct_answer": "English"
+    },
+    {
+        "id": 16,
+        "question": "What additional course must all students enroll in at NYU Paris?",
+        "correct_answer": "French Language courses"
+    }
+]
