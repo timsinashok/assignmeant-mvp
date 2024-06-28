@@ -6,6 +6,7 @@ import json
 import os
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from forms import RoleSelectionForm, StudentRegistrationForm, TeacherRegistrationForm
 
 app = Flask(__name__, template_folder='static/templates', static_folder='static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
@@ -41,30 +42,59 @@ def load_assignments():
             return json.load(f)
     except FileNotFoundError:
         return []
+    
 
-# Route for user registration
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    role_form = RoleSelectionForm(request.form)
+    student_form = StudentRegistrationForm(request.form)
+    teacher_form = TeacherRegistrationForm(request.form)
+    
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        role = request.form['role']
+        role = role_form.role.data
+
+        if role == 'student' and student_form.validate_on_submit():
+            hashed_password = generate_password_hash(student_form.password.data)
+            student = User(username=student_form.username.data, password=hashed_password, role='student')
+            db.session.add(student)
+            db.session.commit()
+            flash('You have successfully registered as a student!', 'success')
+            return redirect(url_for('login'))
+
+        elif role == 'teacher' and teacher_form.validate_on_submit():
+            hashed_password = generate_password_hash(teacher_form.password.data)
+            teacher = User(username=teacher_form.username.data, password=hashed_password, role='teacher')
+            db.session.add(teacher)
+            db.session.commit()
+            flash('You have successfully registered as a teacher!', 'success')
+            return redirect(url_for('login'))
+
+    return render_template('register.html', role_form=role_form, student_form=student_form, teacher_form=teacher_form)
+
+
+# # Route for user registration
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+#         role = request.form['role']
         
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            flash('Username already exists!')
-            return redirect(url_for('register'))
+#         existing_user = User.query.filter_by(username=username).first()
+#         if existing_user:
+#             flash('Username already exists!')
+#             return redirect(url_for('register'))
 
-        new_user = User(username=username, role=role)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
+#         new_user = User(username=username, role=role)
+#         new_user.set_password(password)
+#         db.session.add(new_user)
+#         db.session.commit()
 
-        session['username'] = new_user.username
-        session['role'] = new_user.role
-        return redirect(url_for('index'))
+#         session['username'] = new_user.username
+#         session['role'] = new_user.role
+#         return redirect(url_for('index'))
 
-    return render_template('register.html')
+#     return render_template('register.html')
 
 # Route for user login
 @app.route('/login', methods=['GET', 'POST'])
