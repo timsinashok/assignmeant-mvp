@@ -6,33 +6,25 @@ from models import User
 from wtforms import StringField, PasswordField, SubmitField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 
+
+# Role Selection Form
 class RoleSelectionForm(FlaskForm):
     role = RadioField('Role', choices=[('student', 'Student'), ('teacher', 'Teacher')], validators=[DataRequired()])
-    submit = SubmitField('Next')
 
-# Base User Registration Form
-class UserRegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=150)])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=150)])
+# Student Registration Form
+class StudentRegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    role = SelectField('Role', choices=[('student', 'Student'), ('teacher', 'Teacher')], validators=[DataRequired()])
+    interests = TextAreaField('Interests')
     submit = SubmitField('Register')
 
-    # Custom validator to check if the username is already taken
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('Username is already taken. Please choose a different one.')
-
-# Student Registration Form inheriting from UserRegistrationForm
-class StudentRegistrationForm(UserRegistrationForm):
-    interests = TextAreaField('Interests', validators=[DataRequired()])
-    # Additional student-specific fields can be added here
-
-# Teacher Registration Form inheriting from UserRegistrationForm
-class TeacherRegistrationForm(UserRegistrationForm):
-    # Additional teacher-specific fields can be added here if needed
-    pass
+# Teacher Registration Form
+class TeacherRegistrationForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
 
 # Login Form
 class LoginForm(FlaskForm):

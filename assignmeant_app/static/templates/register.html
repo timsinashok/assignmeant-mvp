@@ -3,100 +3,14 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-    <script>
-        function showForm() {
-            const selectedRole = document.querySelector('input[name="role"]:checked').value;
-            if (selectedRole === 'student') {
-                document.getElementById('student-form').style.display = 'block';
-                document.getElementById('teacher-form').style.display = 'none';
-            } else if (selectedRole === 'teacher') {
-                document.getElementById('student-form').style.display = 'none';
-                document.getElementById('teacher-form').style.display = 'block';
-            }
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initially hide both forms
-            document.getElementById('student-form').style.display = 'none';
-            document.getElementById('teacher-form').style.display = 'none';
-        });
-    </script>
-    <h1>Register</h1>
-
-    <!-- Role Selection Form -->
-    <form method="POST">
+       <!-- Role Selection Form -->
+       <form method="POST" id="role-form">
         {{ role_form.hidden_tag() }}
-        <label>{{ role_form.role.label }}</label><br>
-        {{ role_form.role(onchange="showForm()") }}
-        
-        <!-- Student Registration Form -->
-        <div id="student-form">
-            {{ student_form.hidden_tag() }}
-            <div>
-                {{ student_form.username.label }}<br>
-                {{ student_form.username(size=32) }}
-            </div>
-            <div>
-                {{ student_form.password.label }}<br>
-                {{ student_form.password(size=32) }}
-            </div>
-            <div>
-                {{ student_form.confirm_password.label }}<br>
-                {{ student_form.confirm_password(size=32) }}
-            </div>
-            <div>
-                {{ student_form.interests.label }}<br>
-                {{ student_form.interests(rows=4) }}
-            </div>
-        </div>
-
-        <!-- Teacher Registration Form -->
-        <div id="teacher-form">
-            {{ teacher_form.hidden_tag() }}
-            <div>
-                {{ teacher_form.username.label }}<br>
-                {{ teacher_form.username(size=32) }}
-            </div>
-            <div>
-                {{ teacher_form.password.label }}<br>
-                {{ teacher_form.password(size=32) }}
-            </div>
-            <div>
-                {{ teacher_form.confirm_password.label }}<br>
-                {{ teacher_form.confirm_password(size=32) }}
-            </div>
-        </div>
-
         <div>
-            {{ student_form.submit(id='student_submit') }}
-            {{ teacher_form.submit(id='teacher_submit') }}
+            <label>{{ role_form.role.label }}</label><br>
+            {{ role_form.role(onchange="document.getElementById('role-form').submit()") }}
         </div>
+        <input type="hidden" id="selected-role" name="role" value="{{ role_form.role.data }}">
     </form>
     <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
-
-
-
-    <!-- <div class="card">
-        <div class="card-body">
-            <h2 class="text-center mb-4">Register for Assignment Platform</h2>
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select class="form-control" id="role" name="role" required>
-                        <option value="student">Student</option>
-                        <option value="professor">Professor</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Register</button>
-            </form>
-            <p class="mt-3">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
-        </div>
-    </div> -->
 {% endblock %}

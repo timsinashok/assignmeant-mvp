@@ -43,58 +43,47 @@ def load_assignments():
     except FileNotFoundError:
         return []
     
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    role_form = RoleSelectionForm(request.form)
-    student_form = StudentRegistrationForm(request.form)
-    teacher_form = TeacherRegistrationForm(request.form)
+    role_form = RoleSelectionForm()
+
+    if request.method == 'POST' and role_form.validate_on_submit():
+        role = request.form.get('role')
+        if role == 'student':
+            return redirect(url_for('register_student'))
+        elif role == 'teacher':
+            return redirect(url_for('register_teacher'))
     
-    if request.method == 'POST':
-        role = role_form.role.data
+    return render_template('register.html', role_form=role_form)
 
-        if role == 'student' and student_form.validate_on_submit():
-            hashed_password = generate_password_hash(student_form.password.data)
-            student = User(username=student_form.username.data, password=hashed_password, role='student')
-            db.session.add(student)
-            db.session.commit()
-            flash('You have successfully registered as a student!', 'success')
-            return redirect(url_for('login'))
+@app.route('/register/student', methods=['GET', 'POST'])
+def register_student():
+    student_form = StudentRegistrationForm()
 
-        elif role == 'teacher' and teacher_form.validate_on_submit():
-            hashed_password = generate_password_hash(teacher_form.password.data)
-            teacher = User(username=teacher_form.username.data, password=hashed_password, role='teacher')
-            db.session.add(teacher)
-            db.session.commit()
-            flash('You have successfully registered as a teacher!', 'success')
-            return redirect(url_for('login'))
+    if request.method == 'POST' and student_form.validate_on_submit():
+        hashed_password = generate_password_hash(student_form.password.data)
+        student = User(username=student_form.username.data, password=hashed_password, role='student')
+        db.session.add(student)
+        db.session.commit()
+        flash('You have successfully registered as a student!', 'success')
+        return redirect(url_for('login'))
 
-    return render_template('register.html', role_form=role_form, student_form=student_form, teacher_form=teacher_form)
+    return render_template('register_student.html', student_form=student_form)
 
+@app.route('/register/teacher', methods=['GET', 'POST'])
+def register_teacher():
+    teacher_form = TeacherRegistrationForm()
 
-# # Route for user registration
-# @app.route('/register', methods=['GET', 'POST'])
-# def register():
-#     if request.method == 'POST':
-#         username = request.form['username']
-#         password = request.form['password']
-#         role = request.form['role']
-        
-#         existing_user = User.query.filter_by(username=username).first()
-#         if existing_user:
-#             flash('Username already exists!')
-#             return redirect(url_for('register'))
+    if request.method == 'POST' and teacher_form.validate_on_submit():
+        hashed_password = generate_password_hash(teacher_form.password.data)
+        teacher = User(username=teacher_form.username.data, password=hashed_password, role='teacher')
+        db.session.add(teacher)
+        db.session.commit()
+        flash('You have successfully registered as a teacher!', 'success')
+        return redirect(url_for('login'))
 
-#         new_user = User(username=username, role=role)
-#         new_user.set_password(password)
-#         db.session.add(new_user)
-#         db.session.commit()
-
-#         session['username'] = new_user.username
-#         session['role'] = new_user.role
-#         return redirect(url_for('index'))
-
-#     return render_template('register.html')
+    return render_template('register_teacher.html', teacher_form=teacher_form)
+    
 
 # Route for user login
 @app.route('/login', methods=['GET', 'POST'])
@@ -121,36 +110,56 @@ def logout():
     session.pop('role', None)
     return redirect(url_for('login'))
 
-# Home page displaying list of assignments
+# global home page
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
-    assignments = Assignment.query.all()
-    score = None
-    total_questions = sum(len(a.questions) for a in assignments)
+    return render_template('index.html', username=session['username'])
 
-    if request.method == 'POST':
-        score = 0
-        for assignment in assignments:
-            assignment_id = assignment.id
-            user_answer = request.form.get(f'answer_{assignment_id}')
-            correct_answer = assignment.questions.get('correct_answer')
+@app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
+def dashboard():
+    # check if user is teacher or student
+    if session.get('role') == 'teacher':
+        # get list of students based on teacher id
+        students = User.query.filter_by(role='student').all()
+        return render_template('teacher_dashboard.html', username=session['username'], students=students)
+    else:
+        # get list of assignments
+        assignments = Assignment.query.filger_by(user_id=session['user_id']).all()
+        return render_template('student_dashboard.html', username=session['username'], assignments=assignments) 
+
+# # Home page displaying list of assignments
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
+#     assignments = Assignment.query.all()
+#     score = None
+#     total_questions = sum(len(a.questions) for a in assignments)
+
+#     if request.method == 'POST':
+#         score = 0
+#         for assignment in assignments:
+#             assignment_id = assignment.id
+#             user_answer = request.form.get(f'answer_{assignment_id}')
+#             correct_answer = assignment.questions.get('correct_answer')
             
-            if user_answer.strip().lower() == correct_answer.strip().lower():
-                score += 1
+#             if user_answer.strip().lower() == correct_answer.strip().lower():
+#                 score += 1
 
-            submission = Submission(user_id=session['user_id'], assignment_id=assignment_id, user_answer=user_answer, score=score)
-            db.session.add(submission)
-            db.session.commit()
+#             submission = Submission(user_id=session['user_id'], assignment_id=assignment_id, user_answer=user_answer, score=score)
+#             db.session.add(submission)
+#             db.session.commit()
 
-        return render_template('index.html', assignments=assignments, score=score, total_questions=total_questions, username=session['username'])
+#         return render_template('index.html', assignments=assignments, score=score, total_questions=total_questions, username=session['username'])
 
-    return render_template('index.html', assignments=assignments, username=session['username'])
+#     return render_template('index.html', assignments=assignments, username=session['username'])
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    if 'username' not in session or session.get('role') != 'professor':
+    if 'username' not in session or session.get('role') != 'teacher':
         return redirect(url_for('index'))
 
     if request.method == 'POST':

@@ -26,7 +26,7 @@
                             <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Home</a>
                         </li>
                         {% if session.get('username') %}
-                            {% if session['role'] == 'professor' %}
+                            {% if session['role'] == 'teacher' %}
                                 <li class="nav-item">
                                     <a class="nav-link {% if request.endpoint == 'upload' %}active{% endif %}" href="{{ url_for('upload') }}">Upload</a>
                                 </li>
