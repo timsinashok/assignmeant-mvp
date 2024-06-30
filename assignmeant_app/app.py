@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Assignment, Submission
+from models import db, User, Assignment, Submission, Student
 import json
 import os
 from flask_migrate import Migrate
@@ -115,10 +115,10 @@ def logout():
 def index():
     if 'username' not in session:
         return redirect(url_for('login'))
-    return render_template('index.html', username=session['username'])
+    return render_template('index.html', username=session['username'], role = session['role'])
 
 @app.route('/dashboard', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def dashboard():
     # check if user is teacher or student
     if session.get('role') == 'teacher':
@@ -127,7 +127,8 @@ def dashboard():
         return render_template('teacher_dashboard.html', username=session['username'], students=students)
     else:
         # get list of assignments
-        assignments = Assignment.query.filger_by(user_id=session['user_id']).all()
+        student = User.query.filter_by(username=session['username']).first()
+        assignments = Assignment.query.filter_by(assigned_to_id =student.id).all()
         return render_template('student_dashboard.html', username=session['username'], assignments=assignments) 
 
 # # Home page displaying list of assignments

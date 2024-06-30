@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments List{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Welcome to the dashboard {{username}}.</h2>
+                <p>Here you can see the list of the students and an option to assign assignments.</p>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">Students</h2>
+            {% if students %}
+                <ul class="list-group">
+                    {% for student in students %}
+                        <li class="list-group-item">{{ student.username }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No students found.</p>
+            {% endif %}
+    </div>
+{% endblock %}

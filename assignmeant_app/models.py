@@ -67,15 +67,21 @@ class Student(User):
     def __repr__(self):
         return f'<Student {self.username}>'
 
-# Assignment class
+# Modified Assignment class
 class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     questions = db.Column(db.JSON, nullable=False)
+    assigned_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Teacher who assigned the task
+    assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Student who receives the task
+
+    # Relationships to the User table
+    assigned_by = db.relationship('Teacher', foreign_keys=[assigned_by_id], backref='assigned_tasks')
+    assigned_to = db.relationship('Student', foreign_keys=[assigned_to_id], backref='received_assignments')
 
     def __repr__(self):
-        return f'<Assignment {self.title}>'
+        return f'<Assignment {self.title} assigned by {self.assigned_by.username} to {self.assigned_to.username}>'
 
 # Submission class
 class Submission(db.Model):
