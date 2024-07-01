@@ -96,3 +96,25 @@ class Submission(db.Model):
 
     def __repr__(self):
         return f'<Submission {self.id} by User {self.user_id}>'
+
+
+def create_assignment(title, questions, teacher_username, student_username):
+    teacher = Teacher.query.filter_by(username=teacher_username).first()
+    student = Student.query.filter_by(username=student_username).first()
+    if teacher and student:
+        assignment = Assignment(
+            title=title,
+            questions=questions,
+            assigned_by=teacher,
+            assigned_to=student
+        )
+        db.session.add(assignment)
+        db.session.commit()
+
+
+def get_assignments_for_student(username):
+    student = Student.query.filter_by(username=username).first()
+    if student:
+        assignments = Assignment.query.filter_by(assigned_to=student).all()
+        return assignments
+    return []

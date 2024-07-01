@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Assign  Assignmeants{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">You can assign assignments to your students here.</h2>
+                <p>Please upload a pdf of a chapter including its assignment and we will assign assignments for you.</p>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">File Upload</h2>
+        </div>
+        </div>
+        <form action="{{ url_for('assign') }}" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="file" class="form-label">Select pdf File:</label>
+                <input type="file" class="form-control" id="file" name="file">
+                <label for="number_of_questions" class="form-label">Number of Questions:</label>
+                <input type="number" class="form-control" id="number_of_questions" name="number_of_questions">
+            </div>
+            <button type="submit" class="btn btn-primary">Assign from this pdf</button>
+        </form>
+
+    </div>
+{% endblock %}

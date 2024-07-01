@@ -130,6 +130,26 @@ def dashboard():
         student = User.query.filter_by(username=session['username']).first()
         assignments = Assignment.query.filter_by(assigned_to_id =student.id).all()
         return render_template('student_dashboard.html', username=session['username'], assignments=assignments) 
+    
+@app.route('/assign', methods=['GET', 'POST'])
+def assign():
+    if 'username' not in session or session.get('role') != 'teacher':
+        return redirect(url_for('index'))
+
+    students = User.query.filter_by(role='student').all()
+    assignments = Assignment.query.all()
+
+    if request.method == 'POST':
+        student_id = request.form.get('student')
+        assignment_id = request.form.get('assignment')
+        student = User.query.get(student_id)
+        assignment = Assignment.query.get(assignment_id)
+        student.assignments.append(assignment)
+        db.session.commit()
+        flash('Assignment added successfully!')
+        return redirect(url_for('dashboard'))
+
+    return render_template('assign.html', username=session['username'], students=students, assignments=assignments)
 
 # # Home page displaying list of assignments
 # @app.route('/', methods=['GET', 'POST'])
