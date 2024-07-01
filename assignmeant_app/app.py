@@ -137,46 +137,51 @@ def assign():
         return redirect(url_for('index'))
 
     students = User.query.filter_by(role='student').all()
-    assignments = Assignment.query.all()
+    teacher = User.query.filter_by(username=session['username']).first()
 
     if request.method == 'POST':
-        student_id = request.form.get('student')
-        assignment_id = request.form.get('assignment')
-        student = User.query.get(student_id)
-        assignment = Assignment.query.get(assignment_id)
-        student.assignments.append(assignment)
-        db.session.commit()
-        flash('Assignment added successfully!')
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        
+        if file:
+            upload_folder = os.path.join(app.root_path, 'uploads')
+            # Ensure the upload directory exists
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            filepath = os.path.join(upload_folder, 'chapter.pdf')
+            file.save(filepath)
+        num_questions_requested = request.form.get('number_of_questions')
+
+        assign_assignment(num_questions = num_questions_requested, students = students, teacher = teacher)
+        print(f"Assigned {num_questions_requested} questions to {len(students)} students")
         return redirect(url_for('dashboard'))
 
-    return render_template('assign.html', username=session['username'], students=students, assignments=assignments)
+    return render_template('assign.html', username=session['username'], students=students)
 
-# # Home page displaying list of assignments
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     if 'username' not in session:
-#         return redirect(url_for('login'))
-#     assignments = Assignment.query.all()
-#     score = None
-#     total_questions = sum(len(a.questions) for a in assignments)
 
-#     if request.method == 'POST':
-#         score = 0
-#         for assignment in assignments:
-#             assignment_id = assignment.id
-#             user_answer = request.form.get(f'answer_{assignment_id}')
-#             correct_answer = assignment.questions.get('correct_answer')
-            
-#             if user_answer.strip().lower() == correct_answer.strip().lower():
-#                 score += 1
 
-#             submission = Submission(user_id=session['user_id'], assignment_id=assignment_id, user_answer=user_answer, score=score)
-#             db.session.add(submission)
-#             db.session.commit()
+def assign_assignment(num_questions, students, teacher):
+    for student in students:
+        assignment = Assignment(
+            title=f'Chapter 1 Questions',
+            questions=num_questions,
+            assigned_to_id=student.id,
+            assigned_by_id=teacher.id
+        )
+        db.session.add(assignment)
+        db.session.commit()
 
-#         return render_template('index.html', assignments=assignments, score=score, total_questions=total_questions, username=session['username'])
 
-#     return render_template('index.html', assignments=assignments, username=session['username'])
+
+
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
