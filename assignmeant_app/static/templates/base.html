@@ -17,12 +17,15 @@
             --light-bg: #f4f4f4;
             --dark-bg: #026c57;
             --light-text: #f8f9fa;
+            --border-radius: 15px;
         }
         body {
             font-family: 'Raleway', sans-serif;
-            background-color: var(--light-bg);
+            background-color: transparent; /* Transparent background */
             color: var(--secondary-color);
             line-height: 1.8;
+            margin: 0; /* Remove default margin */
+            height: 100vh; /* Full height to center content */
         }
         .navbar {
             background-color: var(--dark-bg);
@@ -54,10 +57,18 @@
         }
         .container {
             max-width: 1140px;
+            border-radius: var(--border-radius); /* Rounded corners */
+            border-radius: var(--border-radius); 
+            
         }
         .main-content {
             min-height: calc(100vh - 160px);
             padding: 4rem 0;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center; /* Center text */
+            background: transparent; /* Transparent background */
         }
         .card {
             box-shadow: 0 4px 6px rgba(0,0,0,.1);
@@ -109,8 +120,8 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
+    <main class="main-content", style="padding: 2px; line-height: 50px;">
+        <div class="container", style="padding: 2px; font-size: 20px;">
             {% block content %}{% endblock %}
         </div>
     </main>
