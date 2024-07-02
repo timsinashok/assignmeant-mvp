@@ -72,7 +72,7 @@ class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    questions = db.Column(db.JSON, nullable=False)
+    file_path = db.Column(db.String(200))
     assigned_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Teacher who assigned the task
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Student who receives the task
 

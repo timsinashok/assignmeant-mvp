@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}View Assignment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">{{ assignment_title }}</h1>
+            
+            <form method="POST" action="{{ url_for('dashboard') }}">
+    
+                <div class="mb-3">
+                    <label for="username" class="form-label">Logged in as:</label>
+                    <input type="text" class="form-control" id="username" value="{{ username }}" disabled>
+                </div>
+                
+                <!-- Loop through each question in the assignment -->
+                {% for question in assignment_questions %}
+                    <div class="mb-4">
+                        <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
+                        <p class="mb-1">{{ question.question }}</p>
+                        <input type="text" class="form-control" id="question_{{ question.id }}" name="answer_{{ question.id }}" placeholder="Your answer">
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary mt-4">Submit Answers</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,6 +8,8 @@ from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from forms import RoleSelectionForm, StudentRegistrationForm, TeacherRegistrationForm
 
+assignemnt_counter = 3456
+
 app = Flask(__name__, template_folder='static/templates', static_folder='static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 
@@ -155,30 +157,89 @@ def assign():
             if not os.path.exists(upload_folder):
                 os.makedirs(upload_folder)
 
-            filepath = os.path.join(upload_folder, 'chapter.pdf')
+            assignment_file_name = f'assignment_{assignemnt_counter}.json'    
+            filepath = os.path.join(upload_folder, assignment_file_name)
             file.save(filepath)
         num_questions_requested = request.form.get('number_of_questions')
 
-        assign_assignment(num_questions = num_questions_requested, students = students, teacher = teacher)
+        assign_assignment(num_questions = num_questions_requested, students = students, teacher = teacher, path = filepath)
         print(f"Assigned {num_questions_requested} questions to {len(students)} students")
         return redirect(url_for('dashboard'))
 
     return render_template('assign.html', username=session['username'], students=students)
 
-
-
-def assign_assignment(num_questions, students, teacher):
+def assign_assignment(num_questions, students, teacher, path):
     for student in students:
         assignment = Assignment(
             title=f'Chapter 1 Questions',
-            questions=num_questions,
-            assigned_to_id=student.id,
-            assigned_by_id=teacher.id
+            file_path=  path,
+            assigned_to_id= student.id,
+            assigned_by_id= teacher.id
         )
         db.session.add(assignment)
         db.session.commit()
 
 
+@app.route('/view_assignment/<int:assignment_id>', methods=['GET', 'POST'])
+def view_assignment(assignment_id):
+    # Check if user is logged in
+    if 'username' not in session:
+        flash("Please log in to view the assignment.", "warning")
+        return redirect(url_for('login'))
+
+    # Fetch the assignment from the database using the given assignment_id
+    assignment = Assignment.query.filter_by(id=assignment_id).first()
+    print("This is the assignment file path:", assignment.file_path)
+    
+    # Load the JSON file
+    with open(assignment.file_path, 'r') as file:
+        assignment_data = json.load(file)
+    
+    assignment_title = assignment_data[0]['title']
+    assignment_questions = assignment_data[0]['questions']
+    
+    # If a POST request is made, process the form submission
+    if request.method == 'POST':
+        # Collect all answers
+        answers = {}
+        for question in assignment_questions:
+            answer = request.form.get(f'answer_{question["id"]}')
+            answers[question["id"]] = answer
+
+        # Print user's answers to the console (for debugging purposes)
+        print("User's answers:", answers)
+
+        # You might want to save the answers or calculate the score here
+        
+        flash("Your answers have been submitted.", "success")
+        return redirect(url_for('index'))
+
+    # Render the assignment viewing template with the assignment details
+    return render_template('view_assignment.html', 
+                           username=session['username'], 
+                           assignment_title=assignment_title,
+                           assignment_questions=assignment_questions)
+
+
+
+
+
+# @app.route('/view_assignment/<int:assignment_id>', methods=['GET', 'POST'])
+# def view_assignment(assignment_id):  # Capture assignment_id as a parameter
+#     if 'username' not in session:
+#         return redirect(url_for('login'))
+    
+#     # Query the database to get the assignment assigned to the current student with the given id
+#     assignment = Assignment.query.filter_by(id=assignment_id, assigned_to_id=session.get('id')).first()
+    
+#     # Check if the assignment exists and is assigned to the current user
+#     if assignment is None:
+#         return "Assignment not found or not assigned to you", 404
+    
+#     # Render the template with the assignment details
+#     return render_template('view_assignment.html', 
+#                            username=session['username'], 
+#                            assignment=assignment)
 
 
 

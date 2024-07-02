@@ -13,7 +13,9 @@
             {% if assignments %}
                 <ul class="list-group">
                     {% for assignment in assignments %}
-                        <li class="list-group-item">{{ assignment.title }}</li>
+                        <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}">
+                            <li class="list-group.item">{{ assignment.title }}</li>
+                        </a>
                     {% endfor %}
                 </ul>
             {% else %}
