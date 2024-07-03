@@ -197,6 +197,7 @@ def view_assignment(assignment_id):
     
     assignment_title = assignment_data[0]['title']
     assignment_questions = assignment_data[0]['questions']
+    # answers = [assignment_data[0]['questions'][i]['correct_answer'] for i in range(1,17)]
     
     # If a POST request is made, process the form submission
     if request.method == 'POST':
@@ -205,6 +206,9 @@ def view_assignment(assignment_id):
         for question in assignment_questions:
             answer = request.form.get(f'answer_{question["id"]}')
             answers[question["id"]] = answer
+
+        assignemnt_socre = calculate_score(assignment_questions, answers)
+        print("Assignment Score:", assignemnt_socre)
 
         # Print user's answers to the console (for debugging purposes)
         print("User's answers:", answers)
@@ -221,6 +225,12 @@ def view_assignment(assignment_id):
                            assignment_questions=assignment_questions)
 
 
+def calculate_score(assignment_questiosn, answers):
+    score = 0
+    for question in assignment_questiosn:
+        if answers[question['id']] == question['correct_answer']:
+            score += 1
+    return score
 
 
 
