@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Assignment, Submission, Student
+from assignmeant_app.models import db, User, Assignment, Submission, Student, Teacher
 import json
 import os
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from forms import RoleSelectionForm, StudentRegistrationForm, TeacherRegistrationForm
+from assignmeant_app.forms import RoleSelectionForm, StudentRegistrationForm, TeacherRegistrationForm
+import random
+from ML_zone.main import GPT_generate_questions
 
 assignemnt_counter = 3456
 
-app = Flask(__name__, template_folder='static/templates', static_folder='static')
+app = Flask(__name__, template_folder='assignmeant_app/static/templates', static_folder='static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 
 # Database configuration
@@ -29,8 +31,11 @@ login_manager.login_message_category = 'info'
 login_manager.login_message = 'Please log in to access this page.'
 
 
+
+
 # Create the database and tables
 with app.app_context():
+    # db.drop_all()
     db.create_all()
 
 @login_manager.user_loader
@@ -64,7 +69,7 @@ def register_student():
 
     if request.method == 'POST' and student_form.validate_on_submit():
         hashed_password = generate_password_hash(student_form.password.data)
-        student = User(username=student_form.username.data, password=hashed_password, role='student')
+        student = Student(username=student_form.username.data, password=hashed_password, role='student', past_scores=[random.randint(1, 100), random.randint(1,100)], interests=student_form.interests.data)
         db.session.add(student)
         db.session.commit()
         flash('You have successfully registered as a student!', 'success')
@@ -78,7 +83,7 @@ def register_teacher():
 
     if request.method == 'POST' and teacher_form.validate_on_submit():
         hashed_password = generate_password_hash(teacher_form.password.data)
-        teacher = User(username=teacher_form.username.data, password=hashed_password, role='teacher')
+        teacher = Teacher(username=teacher_form.username.data, password=hashed_password, role='teacher')
         db.session.add(teacher)
         db.session.commit()
         flash('You have successfully registered as a teacher!', 'success')
@@ -169,15 +174,60 @@ def assign():
     return render_template('assign.html', username=session['username'], students=students)
 
 def assign_assignment(num_questions, students, teacher, path):
+    global assignemnt_counter
+    data = {}
+    # data['title'] = 'Chapter 1 Questions'
+    data["number_of_questions"] = num_questions
+    data["students"] = []
+    student_detail = {}
     for student in students:
+        student_detail["student_id"] = student.id
+        student_detail["interests"] = student.interests.split(',')
+        student_detail["past_scores"] = student.past_scores
+        data["students"].append(student_detail)
+
+        # clear student_detail
+        student_detail = {}
+    print(data)
+
+    file_path = f'./assignmeant_app/static/user.json'
+
+    with open(file_path, 'w') as file:
+        json.dump(data, file)
+    
+    # Get response from gpt regarding the assignments
+
+    #assignments_response = GPT_generate_questions(path, file_path)
+    #with open("ML_zone/cache.json", 'w') as file:
+    #    json.dump(assignments_response, file)
+
+    with open("ML_zone/cache.json", 'r') as file:
+        assignments_response = json.load(file)
+
+    for curr_id, questions in assignments_response.items():
+        # get numeric student id from string
+        student_id = int(''.join([char for char in curr_id if char.isdigit()]))
+        print(f"Returned Student ID: {student_id}")
+        student = Student.query.filter_by(id=student_id).first()
+        if not student:
+            print('Student not found')
+            continue
+        # save questions in json file
+        path = f'./assignmeant_app/static/assignments/assignment_{assignemnt_counter}.json'
+
+        assignemnt_counter = assignemnt_counter + 1
+
+        with open(path, 'w') as file:
+            json.dump([{"title": "Chapter 1 Questions", "questions": questions}], file)
         assignment = Assignment(
             title=f'Chapter 1 Questions',
             file_path=  path,
             assigned_to_id= student.id,
             assigned_by_id= teacher.id
-        )
+            )
+        print('Assignment created')
         db.session.add(assignment)
-        db.session.commit()
+    db.session.commit()
 
 
 @app.route('/view_assignment/<int:assignment_id>', methods=['GET', 'POST'])
@@ -199,6 +249,7 @@ def view_assignment(assignment_id):
     assignment_questions = assignment_data[0]['questions']
     # answers = [assignment_data[0]['questions'][i]['correct_answer'] for i in range(1,17)]
     
+    print("Reached here")
     # If a POST request is made, process the form submission
     if request.method == 'POST':
         # Collect all answers
@@ -218,6 +269,8 @@ def view_assignment(assignment_id):
         flash("Your answers have been submitted.", "success")
         return redirect(url_for('index'))
 
+    print("Did not receive a POST request.")
+
     # Render the assignment viewing template with the assignment details
     return render_template('view_assignment.html', 
                            username=session['username'], 
@@ -231,28 +284,6 @@ def calculate_score(assignment_questiosn, answers):
         if answers[question['id']] == question['correct_answer']:
             score += 1
     return score
-
-
-
-# @app.route('/view_assignment/<int:assignment_id>', methods=['GET', 'POST'])
-# def view_assignment(assignment_id):  # Capture assignment_id as a parameter
-#     if 'username' not in session:
-#         return redirect(url_for('login'))
-    
-#     # Query the database to get the assignment assigned to the current student with the given id
-#     assignment = Assignment.query.filter_by(id=assignment_id, assigned_to_id=session.get('id')).first()
-    
-#     # Check if the assignment exists and is assigned to the current user
-#     if assignment is None:
-#         return "Assignment not found or not assigned to you", 404
-    
-#     # Render the template with the assignment details
-#     return render_template('view_assignment.html', 
-#                            username=session['username'], 
-#                            assignment=assignment)
-
-
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():

@@ -8,8 +8,8 @@
         <div class="card-body">
             <h1 class="card-title text-center mb-4">{{ assignment_title }}</h1>
             
-            <form method="POST" action="{{ url_for('dashboard') }}" id="assignmentForm">
-    
+            <form method="POST"  id="assignmentForm">
+
                 <div class="mb-3">
                     <label for="username" class="form-label">Logged in as:</label>
                     <input type="text" class="form-control" id="username" value="{{ username }}" disabled>
