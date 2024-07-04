@@ -1,50 +1,90 @@
 {
-    "Bob Smith": [
+    "Student ID: 202": [
         {
             "id": 1,
-            "question": "What color did the sky turn from and to in the poem?",
-            "correct_answer": "From orange to blue"
+            "question": "What color did the sky turn from before it became blue?",
+            "correct_answer": "Majestic orange"
         },
         {
             "id": 2,
-            "question": "In the poem, what natural phenomenon is described in a way that might inspire a painting?",
-            "correct_answer": "The transition of the sky from orange to blue and the sun clinging to the clouds"
+            "question": "What does the soft touch of orange bring to the author?",
+            "correct_answer": "Happiness"
+        },
+        {
+            "id": 3,
+            "question": "In the text, what are the cars described as doing?",
+            "correct_answer": "Sleekly racing with a pair of red lights"
+        },
+        {
+            "id": 4,
+            "question": "How does the author describe the city when the sky turns dark?",
+            "correct_answer": "Small and dark, with just small bulbs and street lights"
         }
     ],
-    "Carol Lee": [
+    "Student ID: 306": [
         {
             "id": 1,
-            "question": "What does the poet say brings happiness to the bottom of their throat?",
-            "correct_answer": "The soft touch of orange"
+            "question": "What does the author see in the morning?",
+            "correct_answer": "The sun clinging to the clouds"
         },
         {
             "id": 2,
-            "question": "How does the poet describe the city at night?",
-            "correct_answer": "Small and dark with small bulbs and street lights trying to compensate for the sunlight"
+            "question": "What does the dark sky make the author feel?",
+            "correct_answer": "Suffocate"
+        },
+        {
+            "id": 3,
+            "question": "What compensates for the sunlight when the sky turns dark?",
+            "correct_answer": "Small bulbs and street lights"
+        },
+        {
+            "id": 4,
+            "question": "What does the author look forward to in the morning?",
+            "correct_answer": "The orange coming back with all the shades"
         }
     ],
-    "David Martinez": [
+    "Student ID: 409": [
         {
             "id": 1,
-            "question": "What does the poet see in the morning that brings hope?",
-            "correct_answer": "The sun clinging to the clouds and the orange sky"
+            "question": "What color does the sky turn to at the end of the text?",
+            "correct_answer": "Blue"
         },
         {
             "id": 2,
-            "question": "How does the poet describe the city at night, which could be an interesting subject for photography?",
-            "correct_answer": "Small and dark with small bulbs and street lights trying to compensate for the sunlight"
+            "question": "What does the author do in peace?",
+            "correct_answer": "Sleep"
+        },
+        {
+            "id": 3,
+            "question": "What is the author\u2019s reaction to the dark sky?",
+            "correct_answer": "It makes the author suffocate"
+        },
+        {
+            "id": 4,
+            "question": "What does the author say the dark sky has to do?",
+            "correct_answer": "Live by the whole night"
         }
     ],
-    "Eve Brown": [
+    "Student ID: 5": [
         {
             "id": 1,
-            "question": "What does the poet say about the dark sky?",
-            "correct_answer": "It makes them suffocate and it has a whole night to live by"
+            "question": "What does the author see in the morning?",
+            "correct_answer": "The sun clinging to the clouds"
         },
         {
             "id": 2,
-            "question": "What does the poet hope for tomorrow morning?",
-            "correct_answer": "The orange comes back with all the shades their eyes can withstand"
+            "question": "What does the author feel when the sky turns dark?",
+            "correct_answer": "Suffocate"
+        },
+        {
+            "id": 3,
+            "question": "What does the author look forward to in the morning?",
+            "correct_answer": "The orange coming back with all the shades"
+        },
+        {
+            "id": 4,
+            "question": "What does the author describe the city as when the sky turns dark?",
+            "correct_answer": "Small and dark, with just small bulbs and street lights"
         }
     ]
 }

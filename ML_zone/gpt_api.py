@@ -1,6 +1,6 @@
 
 import json
-from json_extract import main
+from ML_zone.json_extract import main
 
 def send_student_data_to_gpt(client, additional_messages):
     
@@ -17,7 +17,7 @@ def print_readable_response(response):
     print("\nGPT-4 OpenAI API Response:\n")
     print("Response Content:")
     print(response.choices[0].message.content)
-    main(response.choices[0].message.content)
+    return main(response.choices[0].message.content)
 
 def extract_and_save_json(content, output_file):
     try:

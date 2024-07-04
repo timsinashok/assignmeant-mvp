@@ -32,5 +32,6 @@ def main(response_content):
     # Response content
     response_content 
     combined_data = extract_student_data(response_content)
-    save_combined_json(combined_data, 'combined_students_data.json')
+    return combined_data
+   
 
