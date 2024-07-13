@@ -197,12 +197,13 @@ def assign_assignment(num_questions, students, teacher, path):
     
     # Get response from gpt regarding the assignments
 
-    #assignments_response = GPT_generate_questions(path, file_path)
-    #with open("ML_zone/cache.json", 'w') as file:
-    #    json.dump(assignments_response, file)
+    assignments_response = GPT_generate_questions(path, file_path)
+    print(assignments_response)
+    with open("ML_zone/cache.json", 'w') as file:
+       json.dump(assignments_response, file)
 
-    with open("ML_zone/cache.json", 'r') as file:
-        assignments_response = json.load(file)
+    # with open("ML_zone/cache.json", 'r') as file:
+    #     assignments_response = json.load(file)
 
     for curr_id, questions in assignments_response.items():
         # get numeric student id from string
@@ -218,9 +219,9 @@ def assign_assignment(num_questions, students, teacher, path):
         assignemnt_counter = assignemnt_counter + 1
 
         with open(path, 'w') as file:
-            json.dump([{"title": "Chapter 1 Questions", "questions": questions}], file)
+            json.dump([{"title": "New Chapter 1 Questions", "questions": questions}], file)
         assignment = Assignment(
-            title=f'Chapter 1 Questions',
+            title=f'New Chapter 1 Questions',
             file_path=  path,
             assigned_to_id= student.id,
             assigned_by_id= teacher.id
