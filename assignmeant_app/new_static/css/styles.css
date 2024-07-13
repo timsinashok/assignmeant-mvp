@@ -1,0 +1,37 @@
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+    max-height: 40px; /* Ensures logo does not exceed navbar height */
+}
+
+.footer {
+    background-color: #e9ecef;
+    padding: 10px 0;
+}
+
+.container {
+    padding-bottom: 50px; /* Ensure there's space for the footer */
+}
+
+.nav-link.active {
+    font-weight: bold;
+    color: #f8f9fa !important;
+}
+
+.navbar-nav .nav-item .dropdown-menu {
+    right: 0; /* Align dropdown menu to the right */
+}

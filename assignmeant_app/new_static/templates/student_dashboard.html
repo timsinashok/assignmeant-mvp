@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments List{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Welcome to the dashboard student {{username}}.</h2>
+                <p>Here you can see the list of your assignments.</p>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">Assignments</h2>
+            {% if assignments %}
+                <ul class="list-group">
+                    {% for assignment in assignments %}
+                        <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}">
+                            <li class="list-group.item">{{ assignment.title }}</li>
+                        </a>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You dont have any assignments right now. Come back later.</p>
+            {% endif %}
+    </div>
+{% endblock %}

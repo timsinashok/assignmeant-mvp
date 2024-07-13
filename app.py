@@ -12,7 +12,7 @@ from ML_zone.main import GPT_generate_questions
 
 assignemnt_counter = 3456
 
-app = Flask(__name__, template_folder='assignmeant_app/static/templates', static_folder='static')
+app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', static_folder='new_static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 
 # Database configuration
@@ -197,13 +197,13 @@ def assign_assignment(num_questions, students, teacher, path):
     
     # Get response from gpt regarding the assignments
 
-    assignments_response = GPT_generate_questions(path, file_path)
-    print(assignments_response)
-    with open("ML_zone/cache.json", 'w') as file:
-       json.dump(assignments_response, file)
+    #assignments_response = GPT_generate_questions(path, file_path)
+    # print(assignments_response)
+    # with open("ML_zone/cache.json", 'w') as file:
+    #    json.dump(assignments_response, file)
 
-    # with open("ML_zone/cache.json", 'r') as file:
-    #     assignments_response = json.load(file)
+    with open("ML_zone/cache.json", 'r') as file:
+        assignments_response = json.load(file)
 
     for curr_id, questions in assignments_response.items():
         # get numeric student id from string

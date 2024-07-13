@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Assignment Details{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ assignment.title }}</h2>
+            <p class="text-muted">Posted on: {{ assignment.date_posted }}</p>
+            <hr>
+            <form action="" method="POST" {% if session['role'] == 'professor' %}style="display:none;"{% endif %}>
+                <ul class="list-group mb-4">
+                    {% for question in assignment.questions %}
+                        <li class="list-group-item">
+                            <strong>{{ question.text }}</strong>
+                            {% if session['role'] == 'student' %}
+                                <div class="form-group mt-3">
+                                    <input type="hidden" name="question_id_{{ question.id }}" value="{{ question.id }}">
+                                    <input type="text" class="form-control" name="answer_{{ question.id }}" placeholder="Your Answer" required>
+                                </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% if session['role'] == 'student' %}
+                    <button type="submit" class="btn btn-primary btn-block">Submit Answers</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

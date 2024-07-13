@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Your Courses{% endblock %}
+
+{% block content %}
+
+<h1>Your Enrolled Courses</h1>
+<ul>
+    {% for course in courses %}
+        <li>
+            <a href="{{ url_for('student_course_detail', course_id=course.id) }}">{{ course.title }}</a>
+        </li>
+    {% endfor %}
+
+{% endblock %}
