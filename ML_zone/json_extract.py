@@ -1,40 +1,50 @@
 import json
 
-def extract_student_data(content):
-    students_data = {}
-    # Split the content into sections where each section may contain a student ID and JSON data
-    student_sections = content.split('```json')
-    
-    for section in student_sections:
-        # Check if the section contains a student ID indicated by '### '
-        if '### ' in section:
-            # Extract the student ID
-            name_start = section.find('###') + 4
-            name_end = section.find('\n', name_start)
-            student_id = section[name_start:name_end].strip()
-            
-            # Ensure the extracted ID is a valid number
-            if student_id.isdigit():
-                student_id = int(student_id)  # Convert to integer for better handling
+import json
 
-                # Find the start and end of the JSON data
-                json_start = section.find('[')
-                json_end = section.find(']', json_start) + 1
-                
-                if json_start != -1 and json_end != -1:
-                    # Extract the JSON string
-                    student_json_str = section[json_start:json_end].strip()
-                    try:
-                        # Parse the JSON data
-                        student_data = json.loads(student_json_str)
-                        # Add the parsed data to the dictionary using the student ID as the key
-                        students_data[student_id] = student_data
-                    except json.JSONDecodeError as e:
-                        print(f"Error decoding JSON for student ID {student_id}: {e}")
-            else:
-                print(f"Warning: Invalid student ID '{student_id}' found in the content. Skipping this section.")
+def extract_student_data(content):
+    data = {}
+    lines = content.splitlines()
     
-    return students_data
+    current_key = None
+    current_json = []
+    inside_json_block = False
+
+    for line in lines:
+        if line.startswith("###"):
+            if current_key is not None and current_json:
+                # Join lines to form a valid JSON string
+                joined_json = "".join(current_json).strip()
+                print(f"Parsing JSON for key {current_key}: {joined_json}")
+                try:
+                    # Load JSON string into the dictionary
+                    data[current_key] = json.loads(joined_json)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON for key {current_key}: {e}")
+                    raise
+            
+            # Set new key and reset JSON content
+            current_key = line.strip()[3:]
+            current_json = []
+        elif line.strip() == "```json":
+            inside_json_block = True
+        elif line.strip() == "```":
+            inside_json_block = False
+        elif inside_json_block:
+            # Collect JSON content lines
+            current_json.append(line)
+
+    # Process the last block
+    if current_key is not None and current_json:
+        joined_json = "".join(current_json).strip()
+        print(f"Parsing JSON for key {current_key}: {joined_json}")
+        try:
+            data[current_key] = json.loads(joined_json)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON for key {current_key}: {e}")
+            raise
+    
+    return data
 
 def save_combined_json(data, output_file):
     with open(output_file, 'w') as file:

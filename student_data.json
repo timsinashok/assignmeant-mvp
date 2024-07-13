@@ -1,24 +1,26 @@
 [
     {
-        "student_id": 1,
+        "student_id": 2,
         "interests": [
-            "Women",
-            " Hindi Novels",
-            " Games"
+            "badminton",
+            " Modi",
+            " Nepal"
         ],
         "past_scores": [
-            44,
-            68
+            53,
+            34
         ]
     },
     {
-        "student_id": 2,
+        "student_id": 3,
         "interests": [
-            "MiLF"
+            "pizza",
+            " ocean",
+            " USA"
         ],
         "past_scores": [
-            45,
-            72
+            81,
+            97
         ]
     }
 ]
