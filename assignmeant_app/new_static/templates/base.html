@@ -31,7 +31,7 @@
     <link href="{{ url_for('static', filename='/css/styles.css') }}" rel="stylesheet">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -75,7 +75,7 @@
     <!-- Navbar End -->
 
     <!-- Main Content Wrapper Start -->
-    <div class="d-flex flex-column min-vh-100">
+    <div class="d-flex flex-column flex-grow-1">
         <!-- Main Content Start -->
         <main class="flex-fill">
             {% block content %} 
@@ -83,25 +83,23 @@
         </main>
         <!-- Main Content End -->
     </div>
-    <div>    
-        <!-- Footer Start -->
-        <footer class="text-light footer mt-auto wow fadeIn" data-wow-delay="0.1s" style="background-color: #06BBCC;">
-            <div class="container" style="background-color: #06BBCC;">
-                <div class="copyright">
-                    <div class="row">
-                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">Assignmeant, Contact CRO: Muji Kumar Dhakal</a>, All Right Reserved.
-                        </div>
+
+    <!-- Footer Start -->
+    <footer class="text-light footer mt-auto wow fadeIn" data-wow-delay="0.1s" style="background-color: #06BBCC;">
+        <div class="container" style="background-color: #06BBCC;">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Assignmeant</a>, All Right Reserved.
                     </div>
                 </div>
             </div>
-        </footer>
-        <!-- Footer End -->
-    </div>
-    <!-- Main Content Wrapper End -->
+        </div>
+    </footer>
+    <!-- Footer End -->
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <!-- Back to Top
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a> -->
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
