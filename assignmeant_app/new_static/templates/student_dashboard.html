@@ -1,25 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Assignments List{% endblock %}
+{% block title %}Dashboard - Assignments{% endblock %}
 
 {% block content %}
-    <div class="card">
+<div class="container mt-5">
+    <div class="card shadow-lg" style="background: white; color: #333; border: 2px solid #06BBCC; border-radius: 15px; font-family: Arial, sans-serif;">
         <div class="card-body">
-            <h2 class="card-title">Welcome to the dashboard student {{username}}.</h2>
-                <p>Here you can see the list of your assignments.</p>
+            <div class="row justify-content-center">
+                <!-- Center Column: Welcome and Assignments -->
+                <div class="col-md-8 text-center">
+                    <div class="mb-4">
+                        <img src="{{ url_for('static', filename='images/student.png') }}" alt="Student" style="height: 100px; width: 100px; border-radius: 50%; border: 2px solid #06BBCC;">
+                    </div>
+                    <div>
+                        <h2 class="card-title" style="color: #06BBCC;">Welcome, {{ username }}!</h2>
+                        <p class="lead">Explore the dashboard to manage your assignments effortlessly.</p>
+                    </div>
+                    <hr>
+                    <h2 class="card-title" style="color: #06BBCC;">Assignments</h2>
+                    <p>Here you can see the list of your assignments.</p>
+                    {% if assignments %}
+                        <ul class="list-group">
+                            {% for assignment in assignments %}
+                                <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}" class="text-decoration-none text-dark">
+                                    <li class="list-group-item">{{ assignment.title }}</li>
+                                </a>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>You don't have any assignments right now. Come back later.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <h2 class="card-title">Assignments</h2>
-            {% if assignments %}
-                <ul class="list-group">
-                    {% for assignment in assignments %}
-                        <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}">
-                            <li class="list-group.item">{{ assignment.title }}</li>
-                        </a>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>You dont have any assignments right now. Come back later.</p>
-            {% endif %}
     </div>
+</div>
 {% endblock %}
