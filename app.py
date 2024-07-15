@@ -12,7 +12,7 @@ from ML_zone.main import GPT_generate_questions
 
 assignemnt_counter = 3456
 
-app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', static_folder='new_static')
+app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', static_folder='assignmeant_app/new_static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 
 # Database configuration
@@ -30,12 +30,9 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 login_manager.login_message = 'Please log in to access this page.'
 
-
-
-
 # Create the database and tables
 with app.app_context():
-     #db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 @login_manager.user_loader
@@ -137,6 +134,13 @@ def dashboard():
         student = User.query.filter_by(username=session['username']).first()
         assignments = Assignment.query.filter_by(assigned_to_id =student.id).all()
         return render_template('student_dashboard.html', username=session['username'], assignments=assignments) 
+    
+# view to see student details and assigned assignments
+@app.route('/view_student/<int:student_id>', methods=['GET', 'POST'])
+def view_student(student_id):
+    student = User.query.filter_by(id=student_id).first()
+    assignments = Assignment.query.filter_by(assigned_to_id =student.id).all()
+    return render_template('view_student.html', student=student, assignments=assignments)
     
 @app.route('/assign', methods=['GET', 'POST'])
 def assign():
@@ -259,24 +263,40 @@ def view_assignment(assignment_id):
             answer = request.form.get(f'answer_{question["id"]}')
             answers[question["id"]] = answer
 
-        assignemnt_socre = calculate_score(assignment_questions, answers)
-        print("Assignment Score:", assignemnt_socre)
+        assingment_score = calculate_score(assignment_questions, answers)
+        print("Assignment Score:", assingment_score)
 
         # Print user's answers to the console (for debugging purposes)
         print("User's answers:", answers)
 
         # You might want to save the answers or calculate the score here
+
+        # creating submisstion object and storing in database
+        current_user = User.query.filter_by(username=session['username']).first()
+        submission = Submission(user_id = current_user.id, assignment_id = assignment_id, user_answer = answers, score = assingment_score)
+        db.session.add(submission)
+        db.session.commit()
         
         flash("Your answers have been submitted.", "success")
         return redirect(url_for('index'))
 
     print("Did not receive a POST request.")
 
+    # search if assignment is already submitted
+    submission = Submission.query.filter_by(assignment_id = assignment_id).first()
+
+    if session.get('role') == 'teacher':
+        return render_template('view_assignment_teacher.html',  
+                           assignment_title=assignment_title,
+                           assignment_questions=assignment_questions,
+                           submission = submission)
+
     # Render the assignment viewing template with the assignment details
     return render_template('view_assignment.html', 
                            username=session['username'], 
                            assignment_title=assignment_title,
-                           assignment_questions=assignment_questions)
+                           assignment_questions=assignment_questions,
+                           submission = submission)
 
 
 def calculate_score(assignment_questiosn, answers):
@@ -285,45 +305,6 @@ def calculate_score(assignment_questiosn, answers):
         if answers[question['id']] == question['correct_answer']:
             score += 1
     return score
-
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    if 'username' not in session or session.get('role') != 'teacher':
-        return redirect(url_for('index'))
-
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        
-        file = request.files['file']
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        
-        if file:
-            upload_folder = os.path.join(app.root_path, 'uploads')
-            # Ensure the upload directory exists
-            if not os.path.exists(upload_folder):
-                os.makedirs(upload_folder)
-
-            filepath = os.path.join(upload_folder, 'assignments.json')
-            file.save(filepath)
-            
-            assignments_data = load_assignments()
-
-            for assignment_data in assignments_data:
-                assignment = Assignment(
-                    title=assignment_data['title'],
-                    questions=assignment_data['questions']
-                )
-                db.session.add(assignment)
-                db.session.commit()
-
-            flash('Assignments uploaded successfully!')
-            return redirect(url_for('index'))
-
-    return render_template('upload.html', username=session['username'])
 
 if __name__ == '__main__':
     app.run(debug=True, port = 5001)

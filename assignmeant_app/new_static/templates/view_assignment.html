@@ -16,6 +16,13 @@
                 </div>
                 
                 <!-- Loop through each question in the assignment -->
+                {% if submission.score != NULL %}
+                <div class="mb-4">
+                    <p class="mb-1">{{ submission.score }}</p>
+                </div>
+                {% else %}
+                <p class="mb-1">No submission yet. Please do the assignmeant meant for you.</p>
+                {% endif %}
                 {% for question in assignment_questions %}
                     <div class="mb-4">
                         <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
