@@ -1,29 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Assignments List{% endblock %}
+{% block title %}Dashboard - Assignments and Students{% endblock %}
 
 {% block content %}
-    <div class="card">
+<div class="container mt-5">
+    <div class="card shadow-lg" style="background: white; color: #333; border: 2px solid #06BBCC; border-radius: 15px;">
         <div class="card-body">
-            <h2 class="card-title">Welcome to the dashboard {{username}}.</h2>
-                <p>Here you can see the list of the students and an option to assign assignments.</p>
+            <div class="row">
+                <!-- Left Column: Welcome and Assign Assignments -->
+                <div class="col-md-8">
+                    <div class="text-center mb-4">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="{{ url_for('static', filename='images/teacher.jpg') }}" alt="Teacher" style="height: 100px; width: 100px; border-radius: 50%; margin-right: 15px; border-color: #06BBCC;">
+                            <div>
+                                <h2 class="card-title" style="color: #06BBCC;"> </style>Welcome, {{username}}!</h2>
+                                <p class="lead">Explore the dashboard to manage student assignments effortlessly.</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h2 class="card-title" style="color: #06BBCC;">Assign New Tasks</h2>
+                        <p>Click the button below to assign new assignments to your students.</p>
+                        <a href="{{ url_for('assign') }}" class="btn btn-dark btn-lg" style="background-color: #06BBCC;">Assign Assignments</a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Students List -->
+                <div class="col-md-4">
+                    <h2 class="card-title" style="color: #06BBCC;">Students</h2>
+                    {% if students %}
+                        <ul class="list-group list-group-flush">
+                            {% for student in students %}
+                                <li class="list-group-item" style="background: transparent;">
+                                    <a href="{{ url_for('view_student', student_id=student.id) }}" class="text-decoration-none text-dark">
+                                        {{ student.username }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">No students found.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <h2 class="card-title"> Assign Assignmet to Students From Here</h2>
-            <a href="{{ url_for('assign') }}" class="btn btn-primary">Assign</a>
-        </div>
-        <div class="card-body">
-            <h2 class="card-title">Students</h2>
-            {% if students %}
-                <ul class="list-group">
-                    {% for student in students %}
-                    <a href="{{ url_for('view_student', student_id=student.id) }}">
-                        <li class="list-group-item">{{ student.username }}</li>
-                    </a>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No students found.</p>
-            {% endif %}
     </div>
+</div>
 {% endblock %}
