@@ -5,28 +5,38 @@
 {% block content %}
 
 <!-- Student Registration Form -->
-<form method="POST" id="student-form">
-    {{ student_form.hidden_tag() }}
-    <div>
-        {{ student_form.username.label }}<br>
-        {{ student_form.username(size=32) }}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body p-5">
+            <h3 class="card-title text-center mb-4">Student Registration</h3>
+            <form method="POST" id="student-form">
+                {{ student_form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="username" class="form-label">{{ student_form.username.label }}</label>
+                    {{ student_form.username(class="form-control", id="username", placeholder="Enter your username") }}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">{{ student_form.password.label }}</label>
+                    {{ student_form.password(class="form-control", id="password", placeholder="Enter your password") }}
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">{{ student_form.confirm_password.label }}</label>
+                    {{ student_form.confirm_password(class="form-control", id="confirm_password", placeholder="Confirm your password") }}
+                </div>
+                <div class="mb-3">
+                    <label for="interests" class="form-label">{{ student_form.interests.label }}</label>
+                    {{ student_form.interests(class="form-control", id="interests", rows=4, placeholder="Describe your interests") }}
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Register as Student</button>
+                </div>
+            </form>
+            <div class="text-center mt-4">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+            </div>
+        </div>
     </div>
-    <div>
-        {{ student_form.password.label }}<br>
-        {{ student_form.password(size=32) }}
-    </div>
-    <div>
-        {{ student_form.confirm_password.label }}<br>
-        {{ student_form.confirm_password(size=32) }}
-    </div>
-    <div>
-        {{ student_form.interests.label }}<br>
-        {{ student_form.interests(rows=4) }}
-    </div>
-    <div>
-        <button type="submit" class="btn btn-primary">Register as Student</button>
-    </div>
-</form>
-<p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+</div>
+
 
 {% endblock%}

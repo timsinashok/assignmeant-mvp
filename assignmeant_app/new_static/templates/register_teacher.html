@@ -1,27 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %} Student Registration {% endblock %}
+{% block title %} Teacher Registration {% endblock %}
 
 {% block content %}
+<!-- Teacher Registration Form -->
+<div class="container mt-5">
+    <div class="card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card-body p-5">
+            <h3 class="card-title text-center mb-4">Teacher Registration</h3>
+            <form method="POST" id="teacher-form">
+                {{ teacher_form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="username" class="form-label">{{ teacher_form.username.label }}</label>
+                    {{ teacher_form.username(class="form-control", id="username", placeholder="Enter your username") }}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">{{ teacher_form.password.label }}</label>
+                    {{ teacher_form.password(class="form-control", id="password", placeholder="Enter your password") }}
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">{{ teacher_form.confirm_password.label }}</label>
+                    {{ teacher_form.confirm_password(class="form-control", id="confirm_password", placeholder="Confirm your password") }}
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Register as Teacher</button>
+                </div>
+            </form>
+            <div class="text-center mt-4">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Teacher Registration Form -->
-    <form method="POST" id="teacher-form">
-        {{ teacher_form.hidden_tag() }}
-        <div>
-            {{ teacher_form.username.label }}<br>
-            {{ teacher_form.username(size=32) }}
-        </div>
-        <div>
-            {{ teacher_form.password.label }}<br>
-            {{ teacher_form.password(size=32) }}
-        </div>
-        <div>
-            {{ teacher_form.confirm_password.label }}<br>
-            {{ teacher_form.confirm_password(size=32) }}
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Register as Teacher</button>
-        </div>
-    </form>
-    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
 {% endblock%}
