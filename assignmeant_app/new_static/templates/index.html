@@ -3,16 +3,26 @@
 {% block title %}Assignments List{% endblock %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <h2 class="card-title">Hello {{username}}</h2>
-                <p>Welcome to the assignmeant platform.</p>
-                {% if role == 'teacher' %}
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Dashboard</a>
-                {% endif %}
-                {% if role == 'student' %}
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Dashboard</a>
-                {% endif %}
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 d-flex flex-column align-items-start p-5">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="role-icon me-3">
+                        {% if role == 'teacher' %}
+                            <img src="{{ url_for('static', filename='images/teacher.jpg') }}" alt="Teacher Icon" class="role-image">
+                        {% elif role == 'student' %}
+                            <img src="{{ url_for('static', filename='images/student.png') }}" alt="Student Icon" class="role-image">
+                        {% endif %}
+                    </div>
+                    <div class="welcome-box text-start">
+                        <div class="text-container">
+                            <h2>Hello, {{ username }}!</h2>
+                            <p class="lead mb-4">Welcome to the <span class="highlight">assignMeant,</span><br> where each question is meant for you!</p>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
