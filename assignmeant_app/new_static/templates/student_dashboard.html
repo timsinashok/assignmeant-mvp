@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-lg" style="background: white; color: #333; border: 2px solid #06BBCC; border-radius: 15px; font-family: Arial, sans-serif;">
+    <div class="card shadow-lg" style="background: white; color: #333; border: 0`px solid #06BBCC; border-radius: 15px; font-family: Arial, sans-serif;">
         <div class="card-body">
             <div class="row justify-content-center">
                 <!-- Center Column: Welcome and Assignments -->
@@ -17,14 +17,21 @@
                         <p class="lead">Explore the dashboard to manage your assignments effortlessly.</p>
                     </div>
                     <hr>
-                    <h2 class="card-title" style="color: #06BBCC;">Assignments</h2>
-                    <p>Here you can see the list of your assignments.</p>
+                    <h2 class="card-title" style="color: #06BBCC;">Your Assignments</h2>
+                    <!-- <p>Here you can see the list of your assignments.</p> -->
                     {% if assignments %}
                         <ul class="list-group">
-                            {% for assignment in assignments %}
+                            {% for i, assignment in enumerate(assignments) %}
+                            <li class="list-group-item" style="display: flex; justify-content: space-between; align-items: center;">
                                 <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}" class="text-decoration-none text-dark">
-                                    <li class="list-group-item">{{ assignment.title }}</li>
-                                </a>
+                                    {{ assignment.title }}
+                                </a> 
+                                    {% if scores[assignment.id] != -1 %}
+                                        <small> Score : {{ scores[assignment.id] }} </small>
+                                    {% else %}
+                                        <small>No previous attempts.</small>
+                                    {% endif %}
+                            </li>
                             {% endfor %}
                         </ul>
                     {% else %}
