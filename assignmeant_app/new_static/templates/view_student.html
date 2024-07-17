@@ -4,22 +4,18 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card">
+    <div class="card" style="border-radius: 30px;">
         <div class="card-body">
             <h1 class="card-title text-center mb-4">{{ student.username }}</h1>
             
-            <form method="POST"  id="assignmentForm">
-
-                <div class="mb-3">
-                    <label for="username" class="form-label">Logged in as:</label>
-                    <input type="text" class="form-control" id="username" value="{{ username }}" disabled>
-                </div>
-                
+            <form method="POST"  id="assignmentForm">                
                 <!-- Loop through each question in the assignment -->
                 {% for assignment in assignments %}
                     <div class="mb-4">
                         <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}">
-                            <li class="list-group.item">{{ assignment.title }}</li>
+                            <div class="ms-3">
+                                <p class="mb-0">{{ assignment.title }}</p>
+                            </div>
                         </a>
                     </div>
                 {% endfor %}
