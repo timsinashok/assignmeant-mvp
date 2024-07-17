@@ -1,55 +1,70 @@
 {% extends "base.html" %}
 
-{% block title %}View Assignment{% endblock %}
+{% block title %}Your Courses{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title text-center mb-4">{{ assignment_title }}</h1>
-            
-            <form method="POST"  id="assignmentForm">
-
-                <div class="mb-3">
-                    <label for="username" class="form-label">Logged in as:</label>
-                    <input type="text" class="form-control" id="username" value="{{ username }}" disabled>
-                </div>
+    <div class="card shadow-sm border-0" style="border-radius: 15px; top: 4rem;">
+        <div class="card-body p-5">
+<div class="container-xxl py-5 position-relative">
+    <form method="POST"  id="assignmentForm">
+    <div class="container">
+        <h1 class="card-title text-center mb-4">{{ assignment_title }}</h1>
+        
+        <div class="carousel">
+            {% for question in assignment_questions %}
+             
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
                 
-                <!-- Loop through each question in the assignment -->
-                {% if submission.score != NULL %}
-                <div class="mb-4">
-                    <p class="mb-1">{{ submission.score }}</p>
-                </div>
-                {% else %}
-                <p class="mb-1">No submission yet. Please do the assignmeant meant for you.</p>
-                {% endif %}
-                {% for question in assignment_questions %}
                     <div class="mb-4">
                         <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
                         <p class="mb-1">{{ question.question }}</p>
                         <input type="text" class="form-control" id="question_{{ question.id }}" name="answer_{{ question.id }}" placeholder="Your answer">
                     </div>
-                {% endfor %}
-                
-                <button type="submit" class="btn btn-primary mt-4">Submit Answers</button>
-            </form>
+                </div>
+            {% endfor %}
         </div>
     </div>
+    <div class="container text-center mt-4" style="bottom: 7rem;">
+        <button type="submit" class="btn btn-primary" >Submit Answers</button>
+    </div>
+    </form>
+    <div class="container text-center mt-4">
+        <button id="prev" class="btn btn-primary">Previous</button>
+        <button id="next" class="btn btn-primary">Next</button>
+    </div>
 </div>
+        </div></div></div>
 
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    var form = document.getElementById('assignmentForm');
+    console.log('DOM fully loaded and parsed');
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.carousel-item');
+    const totalItems = items.length;
 
-    form.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            // Check if the focused element is not a button (to allow pressing Enter to click buttons)
-            if (event.target.tagName.toLowerCase() !== 'button') {
-                event.preventDefault(); // Prevent form submission
-            }
-        }
+    console.log('Total items:', totalItems);
+
+    function showItem(index) {
+        console.log('Showing item index:', index);
+        items.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+        });
+    }
+
+    document.getElementById('prev').addEventListener('click', function () {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalItems - 1;
+        showItem(currentIndex);
     });
+
+    document.getElementById('next').addEventListener('click', function () {
+        currentIndex = (currentIndex < totalItems - 1) ? currentIndex + 1 : 0;
+        showItem(currentIndex);
+    });
+
+    // Initialize carousel
+    showItem(currentIndex);
 });
 </script>
 {% endblock %}
