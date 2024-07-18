@@ -6,37 +6,43 @@
 <div class="container mt-5">
     <div class="card shadow-sm border-0" style="border-radius: 15px; top: 4rem;">
         <div class="card-body p-5">
-<div class="container-xxl py-5 position-relative">
-    <form method="POST"  id="assignmentForm">
-    <div class="container">
-        <h1 class="card-title text-center mb-4">{{ assignment_title }}</h1>
-        
-        <div class="carousel">
-            {% for question in assignment_questions %}
-             
-                <div class="carousel-item {% if loop.first %}active{% endif %}">
-                
-                    <div class="mb-4">
-                        <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
-                        <p class="mb-1">{{ question.question }}</p>
-                        <input type="text" class="form-control" id="question_{{ question.id }}" name="answer_{{ question.id }}" placeholder="Your answer">
+            <div class="container-xxl py-5 position-relative">
+                <form method="POST" id="assignmentForm">
+                    <div class="container">
+                        <h1 class="card-title text-center mb-4" style="font-size:larger;">{{ assignment_title }}</h1>
+                        
+                        <div class="carousel">
+                            {% for question in assignment_questions %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <div class="mb-4">
+                                        <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
+                                        <p class="mb-1">{{ question.question }}</p>
+                                        <input type="text" class="form-control question-input" id="question_{{ question.id }}" name="answer_{{ question.id }}" placeholder="Your answer" data-index="{{ loop.index0 }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                    <div class="container text-center mt-4" style="bottom: 7rem;">
+                        <button type="submit" class="btn btn-primary">Submit Answers</button>
+                    </div>
+                </form>
+                <div class="container text-center mt-4">
+                    <button id="prev" class="btn btn-primary">Previous</button>
+                    <button id="next" class="btn btn-primary">Next</button>
                 </div>
-            {% endfor %}
+                <div class="container text-center mt-4" style="bottom: 14rem;">
+                    {% for question in assignment_questions %}
+                        <button class="btn btn-secondary jump-to" id="jump-to-{{ loop.index0 }}" data-index="{{ loop.index0 }}">{{ loop.index }}</button>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container text-center mt-4" style="bottom: 7rem;">
-        <button type="submit" class="btn btn-primary" >Submit Answers</button>
-    </div>
-    </form>
-    <div class="container text-center mt-4">
-        <button id="prev" class="btn btn-primary">Previous</button>
-        <button id="next" class="btn btn-primary">Next</button>
-    </div>
 </div>
-        </div></div></div>
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded and parsed');
@@ -53,6 +59,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function checkAllAnswered() {
+        const allAnswered = [...document.querySelectorAll('.question-input')].every(input => input.value.trim() !== '');
+        if (allAnswered) {
+            confetti();
+        }
+    }
+
     document.getElementById('prev').addEventListener('click', function () {
         currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalItems - 1;
         showItem(currentIndex);
@@ -61,6 +74,30 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('next').addEventListener('click', function () {
         currentIndex = (currentIndex < totalItems - 1) ? currentIndex + 1 : 0;
         showItem(currentIndex);
+    });
+
+    document.querySelectorAll('.jump-to').forEach(button => {
+        button.addEventListener('click', function () {
+            const index = parseInt(this.getAttribute('data-index'));
+            currentIndex = index;
+            showItem(currentIndex);
+        });
+    });
+
+    // Add event listeners to all input fields to change the color of the corresponding button and check if all questions are answered
+    document.querySelectorAll('.question-input').forEach(input => {
+        input.addEventListener('input', function () {
+            const index = this.getAttribute('data-index');
+            const button = document.getElementById('jump-to-' + index);
+            if (this.value.trim() !== '') {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+            } else {
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+            }
+            checkAllAnswered();
+        });
     });
 
     // Initialize carousel
