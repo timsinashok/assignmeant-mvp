@@ -1,10 +1,12 @@
 from ai71 import AI71 
+from ML_zone.config import read_api_config
 
-AI71_API_KEY = "api71-api-fd38a0d8-5cc4-445f-9fe9-eeaff4baa17d"
+config_file = 'ML_zone/config.txt'
+client = AI71(read_api_config(config_file))
 
 
 def get_response(prompt):
-    for chunk in AI71(AI71_API_KEY).chat.completions.create(
+    for chunk in client.chat.completions.create(
         model="tiiuae/falcon-180b-chat",
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
