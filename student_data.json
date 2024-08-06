@@ -1,26 +1,13 @@
 [
     {
-        "student_id": 2,
+        "student_id": 1,
         "interests": [
-            "badminton",
-            " Modi",
-            " Nepal"
+            "Golf",
+            " football"
         ],
         "past_scores": [
-            53,
-            34
-        ]
-    },
-    {
-        "student_id": 3,
-        "interests": [
-            "pizza",
-            " ocean",
-            " USA"
-        ],
-        "past_scores": [
-            81,
-            97
+            65,
+            24
         ]
     }
 ]

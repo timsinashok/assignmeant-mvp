@@ -9,7 +9,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from assignmeant_app.forms import RoleSelectionForm, StudentRegistrationForm, TeacherRegistrationForm
 import random
 from ML_zone.main import GPT_generate_questions
-from assignmeant_app.utils.Helpers.helperFunctions import assign_assignment, calculate_score
+from assignmeant_app.utils.Helpers.helperFunctions import assign_assignment, calculate_score, ai_calculate_score
 
 assignemnt_counter = 3456
 
@@ -196,7 +196,8 @@ def view_assignment(assignment_id):
 
     if request.method == 'POST':
         answers = {question["id"]: request.form.get(f'answer_{question["id"]}') for question in assignment_questions}
-        assignment_score = calculate_score(assignment_questions, answers)
+        #assignment_score = calculate_score(assignment_questions, answers)
+        assignment_score = ai_calculate_score(assignment_questions, answers)
 
         submission = Submission(user_id=current_user.id, assignment_id=assignment_id, user_answer=answers, score=assignment_score)
         db.session.add(submission)
