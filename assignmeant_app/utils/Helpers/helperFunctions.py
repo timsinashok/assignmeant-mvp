@@ -18,7 +18,7 @@ def assign_assignment(num_questions, students, teacher, path):
     
     # with open("ML_zone/cache.json", 'r') as file:
     #     assignments_response = json.load(file)
-    assignments_response = GPT_generate_questions("temp.pdf",data)
+    assignments_response = GPT_generate_questions(path ,data)
     
     for curr_id, questions in assignments_response.items():
         student_id = int(''.join([char for char in curr_id if char.isdigit()]))
