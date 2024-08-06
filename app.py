@@ -33,6 +33,7 @@ login_manager.login_message = 'Please log in to access this page.'
 
 # Create the database and tables
 with app.app_context():
+    #db.drop_all()
     db.create_all()
 
 # Load the user object from the user ID stored in the session
