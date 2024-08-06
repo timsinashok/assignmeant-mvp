@@ -23,15 +23,15 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="container text-center mt-4" style="bottom: 7rem;">
+                    <div class="container text-center mt-4" style="position: relative; bottom: -17rem !important;">
                         <button type="submit" class="btn btn-primary">Submit Answers</button>
                     </div>
                 </form>
-                <div class="container text-center mt-4">
+                <div class="container text-center mt-4" style="position: relative; bottom: -8rem !important;">
                     <button id="prev" class="btn btn-primary">Previous</button>
                     <button id="next" class="btn btn-primary">Next</button>
                 </div>
-                <div class="container text-center mt-4" style="bottom: 14rem;">
+                <div class="container text-center mt-4" style="bottom: 14rem">
                     {% for question in assignment_questions %}
                         <button class="btn btn-secondary jump-to" id="jump-to-{{ loop.index0 }}" data-index="{{ loop.index0 }}">{{ loop.index }}</button>
                     {% endfor %}
