@@ -5,16 +5,14 @@ from ML_zone.json_extract import main
 def send_student_data_to_gpt(client, additional_messages):
     
     response = client.chat.completions.create(
-        model="gpt-4o",
-        messages=additional_messages,
-        max_tokens=1000,
-        temperature=0.3
+        model="tiiuae/falcon-180b-chat",
+        messages=additional_messages
     )
 
     return response
 
 def print_readable_response(response):
-    print("\nGPT-4 OpenAI API Response:\n")
+    print("\nAPI Response:\n")
     print("Response Content:")
     print(response.choices[0].message.content)
     return main(response.choices[0].message.content)

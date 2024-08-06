@@ -1,6 +1,6 @@
 import json
 from assignmeant_app.models import db, Assignment, Student
-
+from ML_zone.main import GPT_generate_questions
 assignemnt_counter = 3456
 
 # Assign assignment helper function
@@ -10,13 +10,14 @@ def assign_assignment(num_questions, students, teacher, path):
     for student in students:
         data["students"].append({"student_id": student.id, "interests": student.interests.split(','), "past_scores": student.past_scores})
 
-    file_path = f'./assignmeant_app/new_static/user.json'
-    with open(file_path, 'w') as file:
-        json.dump(data, file)
+    # file_path = f'./assignmeant_app/new_static/user.json'
+    # with open(file_path, 'w') as file:
+    #     json.dump(data, file)
     
-    with open("ML_zone/cache.json", 'r') as file:
-        assignments_response = json.load(file)
-
+    # with open("ML_zone/cache.json", 'r') as file:
+    #     assignments_response = json.load(file)
+    assignments_response = GPT_generate_questions("temp.pdf",data)
+    
     for curr_id, questions in assignments_response.items():
         student_id = int(''.join([char for char in curr_id if char.isdigit()]))
         student = Student.query.filter_by(id=student_id).first()

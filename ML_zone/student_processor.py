@@ -15,6 +15,7 @@ def process_students(json_file, client, additional_messages):
         
         response = send_student_data_to_gpt(client, additional_messages)
         if response:
+            
             final_questions = print_readable_response(response)
         else:
             print(f"Failed to process data for {student['student_name']}")
