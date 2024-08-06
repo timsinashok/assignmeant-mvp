@@ -11,7 +11,7 @@ import random
 from ML_zone.main import GPT_generate_questions
 from assignmeant_app.utils.Helpers.helperFunctions import assign_assignment, calculate_score, ai_calculate_score
 
-assignemnt_counter = 3456
+assignemnt_pdf_counter = 3456
 
 app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', static_folder='assignmeant_app/new_static')
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
@@ -152,6 +152,7 @@ def view_student(student_id):
 @app.route('/assign', methods=['GET', 'POST'])
 @login_required
 def assign():
+    global assignemnt_pdf_counter
     if current_user.role != 'teacher':
         return redirect(url_for('index'))
 
@@ -173,9 +174,11 @@ def assign():
             if not os.path.exists(upload_folder):
                 os.makedirs(upload_folder)
 
-            assignment_file_name = f'assignment_{assignemnt_counter}.json'
+            assignment_file_name = f'assignment_{assignemnt_pdf_counter}.pdf'
             filepath = os.path.join(upload_folder, assignment_file_name)
+            print("Saved pdf here: ", filepath)
             file.save(filepath)
+            assignemnt_pdf_counter += 1
         
         num_questions_requested = request.form.get('number_of_questions')
         assign_assignment(num_questions=num_questions_requested, students=students, teacher=teacher, path=filepath)

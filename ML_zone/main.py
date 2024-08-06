@@ -8,7 +8,7 @@ import json
 
 def process_pdf_with_gpt4o(pdf_filename):
     try:
-        pdf_path = os.path.join(os.getcwd(), pdf_filename)
+        pdf_path = os.path.join(pdf_filename)
         pdf_text = extract_text_from_pdf(pdf_path)
        
         return pdf_text
