@@ -170,8 +170,11 @@ helperBtns.forEach(function(btn) {
         // Show the popup
         document.getElementById('helperPopup').style.display = 'block';
 
+        // Log the parent element to the console
+        console.log('Parent element:', this.parentElement.parentElement);
+
         // Get the question text from the parent element
-        var questionText = this.parentElement.parentElement.querySelector('p').textContent;
+        var questionText = this.parentElement.parentElement.querySelector('.mb-4 p').textContent;
 
         // Log the question text to the console
         console.log('Question text:', questionText);
