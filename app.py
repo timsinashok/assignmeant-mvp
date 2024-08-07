@@ -11,6 +11,8 @@ import random
 from ML_zone.main import GPT_generate_questions
 from assignmeant_app.utils.Helpers.helperFunctions import assign_assignment, calculate_score, ai_calculate_score
 
+from ML_zone.ai71_helper import get_response
+
 assignemnt_pdf_counter = 3456
 
 app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', static_folder='assignmeant_app/new_static')
@@ -215,6 +217,29 @@ def view_assignment(assignment_id):
         return render_template('view_assignment_teacher.html', assignment_title=assignment_title, assignment_questions=assignment_questions, submission=submission)
 
     return render_template('view_assignment.html', username=current_user.username, assignment_title=assignment_title, assignment_questions=assignment_questions, submission=submission)
+
+@app.route('/get_response')
+def get_response_route():
+    # Get the question parameter from the query string
+    question = request.args.get('question')
+
+    additional_messages = [
+        {'role': 'assistant', 'content': f"Play the role of a helpful teacher and guide a student on this questions."},  
+    ]
+
+    prompt = f"The student is stuck on this question and needs help. The question is: {question} \n Help the sutdent with with question without giving full solution but a good direction to the solution."
+
+
+    print("Prompt:", prompt)
+    prompt += "Please provide short and concise hint that will help student solve the problem. \n"
+
+
+    message_2 = [{'role': 'user', 'content': prompt}]
+    additional_messages.extend(message_2)
+
+    response = get_response(additional_messages)
+    print("Response From ai71:", response)
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

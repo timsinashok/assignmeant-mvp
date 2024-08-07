@@ -12,7 +12,7 @@ def get_response(prompt):
         model="tiiuae/falcon-180b-chat",
         messages=prompt
     )
-
+    print(response)
     return response.choices[0].message.content
 
         

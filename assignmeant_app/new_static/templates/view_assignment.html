@@ -13,6 +13,22 @@
                         
                         <div class="carousel">
                             {% for question in assignment_questions %}
+                                
+                                <!-- Popup window for helper -->
+                                <div class="helper-button" style="position: absolute; top: -150px; right: 10px;">
+                                    <button type="button" class="btn" style="background-color: transparent; border: none; color: rgb(7, 176, 173); cursor: pointer;">Need some help?</button>
+                                </div>
+                                
+                                <!-- Popup Window -->
+                                <div id="helperPopup" class="helper-popup" style="display: none;">
+                                    <div class="helper-content">
+                                        <span class="close" style="position: absolute; top: 5px; right: 10px; cursor: pointer;">&times;</span>
+                                        <p id="helperInfo"></p>
+                                    </div>
+                                </div>
+
+
+
                                 <div class="carousel-item {% if loop.first %}active{% endif %}">
                                     <div class="mb-4">
                                         <label for="question_{{ question.id }}" class="form-label"><strong>Question {{ loop.index }}:</strong></label>
@@ -40,6 +56,39 @@
         </div>
     </div>
 </div>
+
+<style>
+    .helper-button {
+    position: relative;
+    top: -150px;
+    right: 10px;
+}
+
+.helper-popup {
+    position: absolute;
+    top: -100px;
+    right: 10px;
+    width: 300px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    padding: 15px;
+}
+    
+.helper-content {
+    position: relative;
+    padding-top: 25px;
+}
+    
+    .helper-content .close {
+        position: absolute;
+        top: -10px;
+        right: 1px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    </style>
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
@@ -104,5 +153,51 @@ document.addEventListener('DOMContentLoaded', function () {
     showItem(currentIndex);
 });
 </script>
+
+<!-- styles and scripts for popup new -->
+
+
+<!-- Styles for the Popup -->
+    <!-- JavaScript for Popup -->
+    <script>
+    // Select all helper buttons
+// Select all helper buttons
+var helperBtns = document.querySelectorAll('.helper-button button');
+
+// Add click event listener to each helper button
+helperBtns.forEach(function(btn) {
+    btn.onclick = function() {
+        // Show the popup
+        document.getElementById('helperPopup').style.display = 'block';
+
+        // Get the question text from the parent element
+        var questionText = this.parentElement.parentElement.querySelector('p').textContent;
+
+        // Log the question text to the console
+        console.log('Question text:', questionText);
+
+        // Get the response from the server
+        get_response(questionText);
+    }
+});
+
+// Close the popup
+document.querySelector('.helper-content .close').onclick = function() {
+    document.getElementById('helperPopup').style.display = 'none';
+}
+
+function get_response(question) {
+    // Make an AJAX request to the Flask route that handles the get_response logic
+    fetch('/get_response?question=' + encodeURIComponent(question))
+        .then(response => response.text())
+        .then(data => {
+            // Display the response in the popup
+            document.getElementById('helperInfo').textContent = data;
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+    </script>
+
 {% endblock %}
 {% endblock %}

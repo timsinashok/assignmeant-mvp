@@ -51,7 +51,6 @@ def ai_calculate_score(assignment_questions, answers):
         {'role': 'assistant', 'content': f"Play the role of a teacher grading assignments of the students. I will pass question, correct answer and the student's answer for each questions and you have to grade each question out of 10. "},  
     ]
 
-    role = "You are a professor trying to grade an assignment. \n"
     prompt = "I want you to grade an assignment based on given questions, correct answer and user's answer. Each question is of 10 point and you can score 1 to 10 for each question. \n"
 
     for i in range(len(questions)):
