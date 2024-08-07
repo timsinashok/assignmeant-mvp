@@ -19,7 +19,8 @@ app = Flask(__name__, template_folder='assignmeant_app/new_static/templates', st
 app.secret_key = 'supersecretkey'  # Replace with a secure key in production
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://assignmeant_postgres_user:tyuhTbsxYIHrUZW2q19zPHiVPUHS37mU@dpg-cqpp8ojv2p9s73ch0pp0-a.oregon-postgres.render.com/assignmeant_postgres'
+#'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
