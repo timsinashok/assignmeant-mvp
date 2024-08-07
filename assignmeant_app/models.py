@@ -8,9 +8,9 @@ db = SQLAlchemy()
 # Base User class
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
-    role = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(), unique=True, nullable=False)
+    password = db.Column(db.String(), nullable=False)
+    role = db.Column(db.String(), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -51,7 +51,7 @@ class Teacher(User):
 
 # Student class inheriting from User
 class Student(User):
-    interests = db.Column(db.String(500))  # Store interests as a comma-separated string
+    interests = db.Column(db.String())  # Store interests as a comma-separated string
     past_scores = db.Column(db.JSON)  # Store past scores as a JSON list
     teachers = db.relationship(
         'Teacher',
@@ -71,9 +71,9 @@ class Student(User):
 # Modified Assignment class
 class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(), nullable=False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    file_path = db.Column(db.String(200))
+    file_path = db.Column(db.String())
     assigned_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Teacher who assigned the task
     assigned_to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Student who receives the task
 
