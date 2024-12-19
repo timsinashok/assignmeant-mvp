@@ -4,3 +4,4 @@ __pycache__/
 env/
 .DS_Store
 ML_zone/__pycache__/
+.DS_Store
