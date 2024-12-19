@@ -31,7 +31,7 @@
                         <ul class="list-group list-group-flush">
                             {% for student in students %}
                                 <li class="list-group-item" style="background: transparent;">
-                                    <a href="{{ url_for('view_student', student_id=student.id) }}" class="text-decoration-none text-dark">
+                                    <a href="{{ url_for('view_student', student_id=student._id) }}" class="text-decoration-none text-dark">
                                         {{ student.username }}
                                     </a>
                                 </li>

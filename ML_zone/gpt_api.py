@@ -4,10 +4,11 @@ from ML_zone.json_extract import main
 
 def send_student_data_to_gpt(client, additional_messages):
     
+   
     response = client.chat.completions.create(
-        model="tiiuae/falcon-180b-chat",
-        messages=additional_messages
-    )
+    model="llama3.1-8b",
+    messages=additional_messages
+)
 
     return response
 

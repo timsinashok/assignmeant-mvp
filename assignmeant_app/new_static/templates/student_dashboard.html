@@ -23,8 +23,8 @@
                         <ul class="list-group">
                             {% for i, assignment in enumerate(assignments) %}
                             <li class="list-group-item" style="display: flex; justify-content: space-between; align-items: center;">
-                                <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}" class="text-decoration-none text-dark">
-                                    {{ assignment.title }}
+                                <a href="{{ url_for('view_assignment', assignment_id=assignment._id) }}" class="text-decoration-none text-dark">
+                                    {{ assignment.name }}
                                 </a> 
                                     {% if scores[assignment.id] != -1 %}
                                         <small> Score : {{ scores[assignment.id] }} </small>

@@ -1,3 +1,6 @@
 __pycache__/
-instance/
-migrations/
+.env
+*.pyc
+env/
+.DS_Store
+ML_zone/__pycache__/

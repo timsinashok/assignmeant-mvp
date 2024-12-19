@@ -12,9 +12,9 @@
                 <!-- Loop through each question in the assignment -->
                 {% for assignment in assignments %}
                     <div class="mb-4">
-                        <a href="{{ url_for('view_assignment', assignment_id=assignment.id) }}">
+                        <a href="{{ url_for('view_assignment', assignment_id=assignment._id) }}">
                             <div class="ms-3">
-                                <p class="mb-0">{{ assignment.title }}</p>
+                                <p class="mb-0">{{ assignment.name }}</p>
                             </div>
                         </a>
                     </div>
