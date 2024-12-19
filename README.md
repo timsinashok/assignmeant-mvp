@@ -1,36 +1,30 @@
-# mvp
-hello manoj is the CDO of this company. what is a CDO you might ask, keep thinking, I love your curiosity. muah.
+# AssignMeant
 
-
-# Assignment Platform
-
-![Assignment Platform]([https://github.com/assignMeant/mvp/blob/main/assignmeant_app/static/images/logo.png])
-
-**Assignment Platform** is a web-based application for managing assignments between teachers and students. It allows teachers to assign tasks and students to view and submit their responses. The platform is built using Flask and SQLAlchemy, providing a robust and scalable framework for educational environments.
+**AssignMeant** is a web-based application that generates personalized assignments for students using AI. Teachers can upload chapter PDFs, and the app leverages the Llama 3.18B model via Cerebras Inference to create questions tailored to each student’s interests and past performance. Built with Flask and MongoDB, the platform offers features like guided help and autograding to enhance learning.
 
 ## Features
 
+- **AI-Generated Questions**: Questions are created from teacher-uploaded PDFs using the Llama 3.18B model through Cerebras Inference.
+- **Personalization**: Assignments are tailored based on students' previous performance and interests.
+- **Guided Help**: Students can access hints and guidance for solving questions. (Still in development)
+- **Autograder**: Automatic grading for immediate feedback. (Still in development)
 - **User Authentication**: Secure login and registration for both teachers and students.
-- **Assignment Management**: Teachers can create and assign tasks to students.
-- **Question Handling**: Support for different question types, including text responses.
-- **Responsive Design**: A user-friendly interface that works on both desktop and mobile devices.
-- **Real-Time Updates**: Immediate feedback and scoring for student submissions.
-- **Profile Management**: Students can view their past scores and track their progress.
+- **Responsive Design**: Works seamlessly on desktop and mobile devices.
 
 ## Tech Stack
 
-- **Backend**: Flask, SQLAlchemy
-- **Frontend**: HTML, CSS (Bootstrap), JavaScript
-- **Database**: SQLite (development), PostgreSQL/MySQL (production)
+- **Backend**: Flask
+- **Frontend**: HTML, CSS, JavaScript (ReactJS integration optional)
+- **Database**: MongoDB
+- **AI Model**: Llama 3.18B via Cerebras Inference
 - **Version Control**: Git
 
 ## Prerequisites
 
 - **Python 3.8+**
 - **Flask** (installed via `pip install Flask`)
-- **SQLAlchemy** (installed via `pip install SQLAlchemy`)
-- **Bootstrap** (included via CDN)
-- **Font Awesome** (included via CDN)
+- **MongoDB** (local or cloud instance)
+- **Cerebras API Key**
 
 ## Getting Started
 
@@ -38,100 +32,77 @@ hello manoj is the CDO of this company. what is a CDO you might ask, keep thinki
 
 1. **Clone the repository**:
 
-    ```bash
-    git clone https://github.com/yourusername/assignment-platform.git
-    cd assignment-platform
-    ```
+   ```bash
+   git clone https://github.com/timsinashok/assignmeant-mvp.git
+   cd assignmeant-mvp
+   ```
 
 2. **Create a virtual environment**:
 
-    ```bash
-    python -m venv venv
-    ```
+   ```bash
+   python -m venv venv
+   ```
 
 3. **Activate the virtual environment**:
 
-    - **On Windows**:
-      ```bash
-      venv\Scripts\activate
-      ```
-    - **On macOS/Linux**:
-      ```bash
-      source venv/bin/activate
-      ```
+   - **On Windows**:
+     ```bash
+     venv\Scripts\activate
+     ```
+   - **On macOS/Linux**:
+     ```bash
+     source venv/bin/activate
+     ```
 
 4. **Install the required packages**:
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ### Configuration
 
 1. **Set environment variables**:
 
-    Create a `.env` file in the root directory and add the following:
+   Create a `.env` file in the root directory and add the following:
 
-    ```env
-    FLASK_APP=run.py
-    FLASK_ENV=development
-    SECRET_KEY=your_secret_key
-    SQLALCHEMY_DATABASE_URI=sqlite:///assignment.db
-    ```
+   ```env
+    MONGODB_URI = Your MongoDB URI
+    cerebras_api = Your Cerebras API key
+    TEMPLATE_FOLDER = assignmeant_app/new_static/templates
+    STATIC_FOLDER = assignmeant_app/new_static
+    SECRET_KEY=secret
+   ```
 
-2. **Initialize the database**:
+2. **Ensure MongoDB is running**:
 
-    ```bash
-    flask db init
-    flask db migrate -m "Initial migration."
-    flask db upgrade
-    ```
+   If using a local instance, start the MongoDB service.
 
 ### Running the Application
 
 1. **Start the Flask development server**:
 
-    ```bash
-    flask run
-    ```
+   ```bash
+   flask run
+   ```
 
 2. **Open your browser** and navigate to `http://127.0.0.1:5000`.
 
-### Creating Users
+### Using the App
 
-- **Register** as a new user.
-- **Log in** with your credentials.
+- **Teacher Workflow**:
+  - Upload a PDF of a chapter and specify number of questions.
+  - Assign questions generated by the AI to students.
+- **Student Workflow**:
+  - Log in to view personalized assignments.
+  - Use the help feature for guidance and submit responses.
+  - View graded feedback instantly.
 
-### Creating and Viewing Assignments
+# Contributors
+This is a fun project we three of us started pursuing over Summer'24 and have been trying to improve over time. 
 
-- **Teachers** can create assignments and assign them to students.
-- **Students** can view their assigned tasks and submit responses.
+[Ashok Timsina](www.github.com/timsinashok)
 
-## Directory Structure
+[Manoj Dhakal](https://github.com/manoj-dhakal)
 
-```plaintext
-assignment-platform/
-│
-├── app/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── routes.py
-│   ├── templates/
-│   │   ├── base.html
-│   │   ├── index.html
-│   │   ├── view_assignment.html
-│   ├── static/
-│   │   ├── css/
-│   │   ├── js/
-│   ├── forms.py
-│   ├── utils.py
-│
-├── migrations/
-│
-├── venv/
-│
-├── .env
-├── requirements.txt
-├── README.md
-├── run.py
-└── config.py
+[Komal Neupane](https://github.com/komalnpn)
