@@ -1,6 +1,6 @@
 # AssignMeant
 
-**AssignMeant** is a web-based application that generates personalized assignments for students using AI. Teachers can upload chapter PDFs, and the app leverages the Llama 3.18B model via Cerebras Inference to create questions tailored to each student’s interests and past performance. Built with Flask and MongoDB, the platform offers features like guided help and autograding to enhance learning.
+**AssignMeant** is a web-based application that generates personalized assignments for students using AI. Teachers can upload chapter PDFs, and the app leverages the Llama 3.18B model via Cerebras Inference to create questions tailored to each student’s interests and past performance. Built with Flask and MongoDB, the platform offers features like guided help and auto-grading to enhance learning.
 
 ## Features
 
@@ -14,7 +14,7 @@
 ## Tech Stack
 
 - **Backend**: Flask
-- **Frontend**: HTML, CSS, JavaScript (ReactJS integration optional)
+- **Frontend**: HTML, CSS, JavaScript 
 - **Database**: MongoDB
 - **AI Model**: Llama 3.18B via Cerebras Inference
 - **Version Control**: Git
