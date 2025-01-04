@@ -12,6 +12,9 @@ from assignmeant_app.forms import RoleSelectionForm, StudentRegistrationForm, Te
 from dotenv import load_dotenv
 load_dotenv()
 
+from cerebras.cloud.sdk import Cerebras
+cerebras_api = os.getenv('cerebras_api')
+
 from ML_zone.main import GPT_generate_questions, grade_assignment
 
 # Add colored print for better visibility
@@ -408,6 +411,24 @@ def assign():
     teachers = list(db.users.find({'role': 'teacher'}))
 
     return render_template('assign.html', username=current_user.username, students=students, teachers=teachers, path=filepath)# Add similar status prints to other routes as needed...
+
+app.route('/get_help', methods=['GET', 'POST'])
+def get_help():
+    return render_template('get_help.html')
+
+@app.route('/get_help', methods=['GET'])
+def get_response():
+    print("endpoint_hit")
+    question = request.args.get('question')
+    client = Cerebras(api_key=cerebras_api)
+    message = [{'role': 'user', 'content': question}]
+    response = client.chat.completions.create(
+        model="llama3.1-8b",
+        messages=message
+    )
+    response = response.choices[0].message.content
+    print(response)
+    return response
 
 if __name__ == '__main__':
     status_print("Starting Flask application", "SUCCESS")

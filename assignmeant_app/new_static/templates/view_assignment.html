@@ -90,6 +90,7 @@
     }
     </style>
 
+
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 <script>
@@ -152,119 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize carousel
     showItem(currentIndex);
 });
-</script>
-
-<!-- styles and scripts for popup new -->
-
-
-<!-- Styles for the Popup -->
-    <!-- JavaScript for Popup -->
-    <script>
-    // Select all helper buttons
-// Select all helper buttons
-
-// Select all helper buttons
-// var helperBtns = document.querySelectorAll('.helper-button button');
-
-// // Select the carousel navigation buttons
-// var prevBtn = document.getElementById('prev');
-// var nextBtn = document.getElementById('next');
-
-// // Select the carousel
-// var carousel = document.querySelector('.carousel');
-
-// // Add click event listener to each helper button
-// helperBtns.forEach(function(btn) {
-//     btn.onclick = function() {
-//         // Show the popup
-//         document.getElementById('helperPopup').style.display = 'block';
-
-//         // Get the question text from the parent element
-//         var questionText = this.parentElement.parentElement.querySelector('.mb-4 p').textContent;
-
-//         // Get the response from the server
-//         get_response(questionText);
-//     }
-// });
-
-// // Close the popup
-// document.querySelector('.helper-content .close').onclick = function() {
-//     document.getElementById('helperPopup').style.display = 'none';
-// }
-
-// // Add click event listener to the carousel navigation buttons
-// prevBtn.addEventListener('click', function() {
-//     // Hide the popup and clear the response text
-//     document.getElementById('helperPopup').style.display = 'none';
-//     document.getElementById('helperInfo').textContent = '';
-// });
-
-// nextBtn.addEventListener('click', function() {
-//     // Hide the popup and clear the response text
-//     document.getElementById('helperPopup').style.display = 'none';
-//     document.getElementById('helperInfo').textContent = '';
-// });
-
-// // Add event listener to the carousel to check if there is any value in the response text
-// carousel.addEventListener('slid.bs.carousel', function() {
-//     var responseText = document.getElementById('helperInfo').textContent;
-//     if (responseText === '') {
-//         // Get the question text from the active carousel item
-//         var questionText = document.querySelector('.carousel-item.active .mb-4 p').textContent;
-
-//         // Get the response from the server
-//         get_response(questionText);
-//     }
-// });
-
-// function get_response(question) {
-//     // Make an AJAX request to the Flask route that handles the get_response logic
-//     fetch('/get_response?question=' + encodeURIComponent(question))
-//         .then(response => response.text())
-//         .then(data => {
-//             // Display the response in the popup
-//             document.getElementById('helperInfo').textContent = data;
-//         })
-//         .catch(error => console.error('Error:', error));
-// }
-
-// var helperBtns = document.querySelectorAll('.helper-button button');
-
-// // Add click event listener to each helper button
-// helperBtns.forEach(function(btn) {
-//     btn.onclick = function() {
-//         // Show the popup
-//         document.getElementById('helperPopup').style.display = 'block';
-
-//         // Log the parent element to the console
-//         console.log('Parent element:', this.parentElement.parentElement);
-
-//         // Get the question text from the parent element
-//         var questionText = this.parentElement.parentElement.querySelector('.mb-4 p').textContent;
-
-//         // Log the question text to the console
-//         console.log('Question text:', questionText);
-
-//         // Get the response from the server
-//         get_response(questionText);
-//     }
-// });
-
-// // Close the popup
-// document.querySelector('.helper-content .close').onclick = function() {
-//     document.getElementById('helperPopup').style.display = 'none';
-// }
-
-// function get_response(question) {
-//     // Make an AJAX request to the Flask route that handles the get_response logic
-//     fetch('/get_response?question=' + encodeURIComponent(question))
-//         .then(response => response.text())
-//         .then(data => {
-//             // Display the response in the popup
-//             document.getElementById('helperInfo').textContent = data;
-//         })
-//         .catch(error => console.error('Error:', error));
-// }
 
 // Select all helper buttons
 var helperBtns = document.querySelectorAll('.helper-button button');
@@ -331,7 +219,7 @@ carousel.addEventListener('slid.bs.carousel', function() {
 
 function get_response(question) {
     // Make an AJAX request to the Flask route that handles the get_response logic
-    fetch('/get_response?question=' + encodeURIComponent(question))
+    fetch('/get_help?question=' + encodeURIComponent(question))
         .then(response => response.text())
         .then(data => {
             // Display the response in the popup
@@ -341,7 +229,8 @@ function get_response(question) {
 }
 
 
-    </script>
+</script>
 
 {% endblock %}
 {% endblock %}
+
