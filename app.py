@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
@@ -412,23 +412,26 @@ def assign():
 
     return render_template('assign.html', username=current_user.username, students=students, teachers=teachers, path=filepath)# Add similar status prints to other routes as needed...
 
-app.route('/get_help', methods=['GET', 'POST'])
-def get_help():
-    return render_template('get_help.html')
-
 @app.route('/get_help', methods=['GET'])
 def get_response():
-    print("endpoint_hit")
+    print("Endpoint hit")
     question = request.args.get('question')
-    client = Cerebras(api_key=cerebras_api)
-    message = [{'role': 'user', 'content': question}]
-    response = client.chat.completions.create(
-        model="llama3.1-8b",
-        messages=message
-    )
-    response = response.choices[0].message.content
-    print(response)
-    return response
+
+    if not question:
+        return jsonify({"error": "No question provided"}), 400
+
+    try:
+        message = [{'role': 'user', 'content': question}]
+        response = client.chat.completions.create(
+            model="llama3.1-8b",
+            messages=message
+        )
+        answer = response.choices[0].message.content
+        print(f"Response: {answer[:100]}...")  # Print only the first 100 characters of the response to check
+        return jsonify({"response": answer})
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        return jsonify({"error": "An error occurred while processing your request"}), 500
 
 if __name__ == '__main__':
     status_print("Starting Flask application", "SUCCESS")
